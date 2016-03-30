@@ -89,7 +89,6 @@ extension MCTSNode : Hashable {
 final class MonteCarloTreeSearch {
 	private var root: MCTSNode
 	private let aiColor: OthelloBoard.Color
-	private(set) var simCount: Int = 0
 	private let dispatchGroup: dispatch_group_t = dispatch_group_create()
 	
 	init(startingGameState: OthelloGame, aiColor: OthelloBoard.Color) {
@@ -115,7 +114,6 @@ final class MonteCarloTreeSearch {
 		}
 		dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
 		
-		self.simCount += concurrency
 		for result in results {
 			MonteCarloTreeSearch.back_prop(fromNode: pickedNode, delta: result) // back propagate the result up the tree
 		}
@@ -136,8 +134,6 @@ final class MonteCarloTreeSearch {
 		} else {
 			self.root = MCTSNode(gameState: startingGameState) // build a container node
 		}
-		
-		self.simCount = 0
 	}
 	
 	func bestAction() -> OthelloMove {
