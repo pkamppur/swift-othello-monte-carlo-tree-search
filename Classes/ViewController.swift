@@ -77,69 +77,86 @@ class ViewController: UIViewController {
 			}
 			
 			dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), {
-				let timeLimit = 2.0
-				let uiUpdateInterval = 0.1
-				
-				print("Starting Monte Carlo Tree Search")
-				
-				self.mctsSearch.updateStartingState(currentGameState) // Use this to reuse already computed nodes
-				//self.mctsSearch = MonteCarloTreeSearch(startingGameState: currentGameState, aiColor: self.aiColor) // Use this to start with a clean sheet.
-				
-				let start = NSDate.timeIntervalSinceReferenceDate()
-				while NSDate.timeIntervalSinceReferenceDate() - start < timeLimit {
-					if self.mctsSearch.hasUnsimulatedPlays() == false {
-						break
-					}
-					
-					let iterationsStart = NSDate.timeIntervalSinceReferenceDate()
-					while NSDate.timeIntervalSinceReferenceDate() - iterationsStart < uiUpdateInterval {
-						self.mctsSearch.iterateSearch()
-					}
-					
-					let tempSearchResults = self.mctsSearch.results()
-					
-					dispatch_async(dispatch_get_main_queue(), {
-						self.aiInfoLabel.text = "Simulated \(tempSearchResults.simulations) games"
-						
-						var highlightedMoves = [(move: OthelloMove, color: UIColor)]()
-						for moveNode in tempSearchResults.moves {
-							let winrate = CGFloat(moveNode.wins) / CGFloat(moveNode.plays)
-							highlightedMoves.append((move: moveNode.move, color: UIColor(white: 0.2, alpha: winrate)))
-						}
-						
-						self.othelloView.highlightedMoves = highlightedMoves
-					})
-				}
-				let end = NSDate.timeIntervalSinceReferenceDate()
-				
-				let searchResults = self.mctsSearch.results()
-				
-				for moveNove in searchResults.moves.sort({ (left: MCTSNode, right: MCTSNode) -> Bool in
-					return Double(left.wins) / Double(left.plays) > Double(right.wins) / Double(right.plays)
-				}) {
-					if moveNove.plays > 0 {
-						let winrate = Double(moveNove.wins) / Double(moveNove.plays)
-						print("    Move \(moveNove.move): win confidence: \(Int(winrate * 100))%, \(moveNove.plays) plays")
-					}
-				}
-				
-				let move = searchResults.bestMove
-				print("    Simulated \(searchResults.simulations) games, conf: \(Int(searchResults.confidence * 100))%")
-				
-				print("    Chose move \(move)")
-				
-				dispatch_async(dispatch_get_main_queue(), { 
-					self.game.makeMove(move, forColor: color)
-					
-					self.othelloView.highlightedMoves = []
-					
-					self.aiInfoLabel.text = "Simulated \(searchResults.simulations) games in \(Int(end - start)) s, conf: \(Int(searchResults.confidence * 100))%"
-					
-					self.updateUI()
-					
-					self.checkAI()
-				})
+				self.runAI(timeLimit: 2.0, fromGameState: currentGameState)
 			})
+		}
+	}
+	
+	private func runAI(timeLimit timeLimit: NSTimeInterval, fromGameState currentGameState: OthelloGame) {
+		print("Starting Monte Carlo Tree Search")
+		
+		self.mctsSearch.updateStartingState(currentGameState) // Use this to reuse already computed nodes
+		//self.mctsSearch = MonteCarloTreeSearch(startingGameState: currentGameState, aiColor: self.aiColor) // Use this to start with a clean sheet.
+		
+		// Loop until allotted timeLimit is reached,
+		// eport updates to ui frequently so the user doesn't have to start an static screen
+		let uiUpdateInterval = 0.1
+		let start = NSDate.timeIntervalSinceReferenceDate()
+		var lastUpdateTime = start
+		while NSDate.timeIntervalSinceReferenceDate() - start < timeLimit {
+			if self.mctsSearch.hasUnsimulatedPlays() == false {
+				break
+			}
+			
+			self.mctsSearch.iterateSearch()
+			
+			let now = NSDate.timeIntervalSinceReferenceDate()
+			if now - lastUpdateTime > uiUpdateInterval {
+				lastUpdateTime = now
+				let tempSearchResults = self.mctsSearch.results()
+				
+				dispatch_async(dispatch_get_main_queue(), {
+					self.updateAIWithInterimSearchResults(tempSearchResults)
+				})
+			}
+		}
+		let end = NSDate.timeIntervalSinceReferenceDate()
+		
+		let searchResults = self.mctsSearch.results()
+		
+		self.printResults(searchResults)
+		
+		let bestMove = searchResults.bestMove
+		print("    Simulated \(searchResults.simulations) games, conf: \(Int(searchResults.confidence * 100))%")
+		print("    Chose move \(bestMove)")
+		
+		dispatch_async(dispatch_get_main_queue(), {
+			self.makeAIMove(bestMove, searchResults: searchResults, duration: end - start)
+		})
+	}
+	
+	private func updateAIWithInterimSearchResults(searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode])) {
+		self.aiInfoLabel.text = "Simulated \(searchResults.simulations) games"
+		
+		var highlightedMoves = [(move: OthelloMove, color: UIColor)]()
+		for moveNode in searchResults.moves {
+			let winrate = CGFloat(moveNode.wins) / CGFloat(moveNode.plays)
+			highlightedMoves.append((move: moveNode.move, color: UIColor(white: 0.2, alpha: winrate)))
+		}
+		
+		self.othelloView.highlightedMoves = highlightedMoves
+	}
+	
+	private func makeAIMove(move: OthelloMove, searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode]), duration: NSTimeInterval) {
+		self.game.makeMove(move, forColor: self.aiColor)
+		
+		self.othelloView.highlightedMoves = []
+		
+		self.aiInfoLabel.text = "Simulated \(searchResults.simulations) games in \(Int(duration)) s, conf: \(Int(searchResults.confidence * 100))%"
+		
+		self.updateUI()
+		
+		self.checkAI()
+	}
+	
+	private func printResults(searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode])) {
+		for moveNove in searchResults.moves.sort({ (left: MCTSNode, right: MCTSNode) -> Bool in
+			return Double(left.wins) / Double(left.plays) > Double(right.wins) / Double(right.plays)
+		}) {
+			if moveNove.plays > 0 {
+				let winrate = Double(moveNove.wins) / Double(moveNove.plays)
+				print("    Move \(moveNove.move): win confidence: \(Int(winrate * 100))%, \(moveNove.plays) plays")
+			}
 		}
 	}
 	
