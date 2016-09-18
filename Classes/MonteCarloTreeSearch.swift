@@ -32,7 +32,7 @@ final class MCTSNode {
 		self.allMovesExpanded = false
 	}
 	
-	func hasVisitedMove(move: OthelloMove) -> Bool {
+	func hasVisitedMove(_ move: OthelloMove) -> Bool {
 		for child in self.children {
 			if child.move == move {
 				return true
@@ -41,16 +41,16 @@ final class MCTSNode {
 		return false
 	}
 	
-	func addChild(child: MCTSNode) {
+	func addChild(_ child: MCTSNode) {
 		child.parent = self
 		self.children.append(child)
 	}
 	
 	func hasUnsimulatedPlays() -> Bool {
-		if case .Tie = self.gameState.state {
+		if case .tie = self.gameState.state {
 			return false
 		}
-		if case .Won(_) = self.gameState.state {
+		if case .won(_) = self.gameState.state {
 			return false
 		}
 		
@@ -87,9 +87,9 @@ extension MCTSNode : Hashable {
 
 
 final class MonteCarloTreeSearch {
-	private var root: MCTSNode
-	private let aiColor: OthelloBoard.Color
-	private let dispatchGroup: dispatch_group_t = dispatch_group_create()
+	fileprivate var root: MCTSNode
+	fileprivate let aiColor: OthelloBoard.Color
+	fileprivate let dispatchGroup: DispatchGroup = DispatchGroup()
 	
 	init(startingGameState: OthelloGame, aiColor: OthelloBoard.Color) {
 		self.root = MCTSNode(gameState: startingGameState) // build a container node
@@ -102,17 +102,17 @@ final class MonteCarloTreeSearch {
 		}
 		
 		let pickedNode = MonteCarloTreeSearch.tree_policy(root) // pick child state to simulate on
-		let concurrency = NSProcessInfo.processInfo().activeProcessorCount
+		let concurrency = ProcessInfo.processInfo.activeProcessorCount
 		
-		var results = Array<Int>(count: concurrency, repeatedValue: 0)
+		var results = Array<Int>(repeating: 0, count: concurrency)
 		for i in 0..<concurrency {
-			dispatch_group_async(dispatchGroup, dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), {
+			DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async(group: dispatchGroup, execute: {
 				let result = MonteCarloTreeSearch.simulate(pickedNode.gameState, colorToOptimize: self.aiColor) // run one sim from this state, return win or lose
 				
 				results[i] = result
 			})
 		}
-		dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER)
+		dispatchGroup.wait(timeout: DispatchTime.distantFuture)
 		
 		for result in results {
 			MonteCarloTreeSearch.back_prop(fromNode: pickedNode, delta: result) // back propagate the result up the tree
@@ -123,7 +123,7 @@ final class MonteCarloTreeSearch {
 		return self.root.hasUnsimulatedPlays()
 	}
 	
-	func updateStartingState(startingGameState: OthelloGame) {
+	func updateStartingState(_ startingGameState: OthelloGame) {
 		let newRoot = MonteCarloTreeSearch.findMatchingNode(startingGameState, fromNode: self.root)
 		if newRoot != nil && newRoot!.plays > 0 {
 			print("    Found root from previous run \(newRoot!)")
@@ -153,7 +153,7 @@ final class MonteCarloTreeSearch {
 		return (bestMove: bestChild.move, simulations:self.root.plays, confidence: confidence, self.root.children)
 	}
 	
-	static func findMatchingNode(gameState: OthelloGame, fromNode node: MCTSNode) -> MCTSNode? {
+	static func findMatchingNode(_ gameState: OthelloGame, fromNode node: MCTSNode) -> MCTSNode? {
 		if node.gameState == gameState {
 			return node
 		}
@@ -173,16 +173,16 @@ final class MonteCarloTreeSearch {
 		return nil
 	}
 	
-	static func simulate(initialGameState: OthelloGame, colorToOptimize playerColor: OthelloBoard.Color) -> Int {
+	static func simulate(_ initialGameState: OthelloGame, colorToOptimize playerColor: OthelloBoard.Color) -> Int {
 		var gameState = initialGameState
 		
 		while true {
 			switch gameState.state {
-			case .Won(let color):
+			case .won(let color):
 				return color == playerColor ? 1 : 0
-			case .Tie:
+			case .tie:
 				return 0
-			case .Turn(let color):
+			case .turn(let color):
 				let availableMoves = gameState.allMoves(color)
 				
 				gameState.makeMove(availableMoves.randomItem(), forColor: color)
@@ -190,16 +190,16 @@ final class MonteCarloTreeSearch {
 		}
 	}
 	
-	static func tree_policy(root: MCTSNode) -> MCTSNode {
+	static func tree_policy(_ root: MCTSNode) -> MCTSNode {
 		// Given a root node, determine which child to visit using Upper Confidence Bound.
 		var curNode = root
 		while true {
 			switch curNode.gameState.state {
-			case .Won(_):
+			case .won(_):
 				return curNode
-			case .Tie:
+			case .tie:
 				return curNode
-			case .Turn(let color):
+			case .turn(let color):
 				if curNode.allMovesExpanded == false {
 					//assert(curNode.allMovesExpanded == false)
 					let legal_moves = curNode.gameState.allMoves(color)
@@ -228,7 +228,7 @@ final class MonteCarloTreeSearch {
 		//return curNode
 	}
 	
-	static func best_child(node: MCTSNode) -> MCTSNode{
+	static func best_child(_ node: MCTSNode) -> MCTSNode{
 		let C: Float = 2 * sqrt(2)  // 'exploration' value, higher is more exploration oriented (in contrast to exploitation orientated)
 		var values = [MCTSNode: Float]()
 		for child in node.children {
@@ -240,7 +240,7 @@ final class MonteCarloTreeSearch {
 			values[child] = (Float(wins) / Float(plays)) + C * sqrt(log(Float(parent_plays)) / Float(plays))
 		}
 		
-		let best_choice = values.maxElement { (left: (MCTSNode, Float), right: (MCTSNode, Float)) -> Bool in
+		let best_choice = values.max { (left: (MCTSNode, Float), right: (MCTSNode, Float)) -> Bool in
 			let (_, leftValue) = left
 			let (_, rightValue) = right
 			return leftValue < rightValue // "left.1 < right.1" for short
@@ -263,7 +263,7 @@ final class MonteCarloTreeSearch {
 		node.wins += delta
 	}
 	
-	static func best_move_child(node: MCTSNode) -> MCTSNode {
+	static func best_move_child(_ node: MCTSNode) -> MCTSNode {
 		// Returns the best action from this game state node. In Monte Carlo Tree Search we pick the one that was visited the most.  We can break ties by picking	the state that won the most.
 		var most_plays = Int.min
 		var best_wins = Int.min
@@ -290,7 +290,7 @@ final class MonteCarloTreeSearch {
 		return best_children.randomItem()
 	}
 	
-	static func best_move(node: MCTSNode) -> OthelloMove {
+	static func best_move(_ node: MCTSNode) -> OthelloMove {
 		return best_move_child(node).move
 	}
 }

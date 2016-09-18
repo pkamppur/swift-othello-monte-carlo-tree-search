@@ -38,7 +38,7 @@ class OthelloView: UIView {
 		}
 	}
 	
-	func moveFromPoint(point: CGPoint) -> OthelloMove {
+	func moveFromPoint(_ point: CGPoint) -> OthelloMove {
 		guard let board = self.board else {
 			return OthelloMove(x: -1, y: -1)
 		}
@@ -66,7 +66,7 @@ class OthelloView: UIView {
 		return OthelloMove(x: x, y: y)
 	}
 	
-	override func drawRect(rect: CGRect) {
+	override func draw(_ rect: CGRect) {
 		guard let board = self.board else {
 			return
 		}
@@ -76,10 +76,10 @@ class OthelloView: UIView {
 		let blockWidth: Int = Int(frameRect.size.width - 1) / board.boardWidth;
 		let blockHeight: Int = Int(frameRect.size.height - 1) / board.boardHeight;
 		
-		UIColor.whiteColor().set()
+		UIColor.white.set()
 		UIRectFill(frameRect)
 		
-		UIColor.blackColor().set()
+		UIColor.black.set()
 		
 		let blockRectCalculator = { (x: Int, y: Int) -> CGRect in
 			let blockRect = CGRect(x: x * blockWidth,
@@ -94,34 +94,34 @@ class OthelloView: UIView {
 			
 			UIRectFrame(blockRect)
 			
-			let path = UIBezierPath(ovalInRect: blockRect.insetBy(dx: 2, dy: 2))
+			let path = UIBezierPath(ovalIn: blockRect.insetBy(dx: 2, dy: 2))
 			
 			switch piece {
-			case .Color(let color):
+			case .color(let color):
 				switch color {
-				case .White:
+				case .white:
 					path.stroke()
 					break
-				case .Black:
+				case .black:
 					path.fill()
 					break
 				}
 				break;
-			case .Empty:
+			case .empty:
 				break;
 			}
 			
 			if self.highlightedSquares.contains(OthelloMove(x: x, y: y)) {
-				UIColor.blueColor().set()
+				UIColor.blue.set()
 				UIRectFrame(blockRect.insetBy(dx: 1, dy: 1))
-				UIColor.blackColor().set()
+				UIColor.black.set()
 			}
 		}
 		
 		for highlightedMove in highlightedMoves {
 			highlightedMove.color.set()
 			let blockRect = blockRectCalculator(highlightedMove.move.x, highlightedMove.move.y).insetBy(dx: 1, dy: 1)
-			UIRectFillUsingBlendMode(blockRect, .Normal)
+			UIRectFillUsingBlendMode(blockRect, .normal)
 		}
 	}
 }

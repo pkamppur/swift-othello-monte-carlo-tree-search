@@ -28,25 +28,25 @@ extension OthelloMove : Hashable {
 
 struct OthelloGame {
 	enum State {
-		case Turn(OthelloBoard.Color)
-		case Won(OthelloBoard.Color)
-		case Tie
+		case turn(OthelloBoard.Color)
+		case won(OthelloBoard.Color)
+		case tie
 	}
 	
-	private(set) var board: OthelloBoard
-	private(set) var state: State
+	fileprivate(set) var board: OthelloBoard
+	fileprivate(set) var state: State
 	
 	init () {
 		self.board = OthelloBoard()
-		self.board[3, 3] = OthelloBoard.Piece.Color(OthelloBoard.Color.White)
-		self.board[4, 4] = OthelloBoard.Piece.Color(OthelloBoard.Color.White)
-		self.board[3, 4] = OthelloBoard.Piece.Color(OthelloBoard.Color.Black)
-		self.board[4, 3] = OthelloBoard.Piece.Color(OthelloBoard.Color.Black)
+		self.board[3, 3] = OthelloBoard.Piece.color(OthelloBoard.Color.white)
+		self.board[4, 4] = OthelloBoard.Piece.color(OthelloBoard.Color.white)
+		self.board[3, 4] = OthelloBoard.Piece.color(OthelloBoard.Color.black)
+		self.board[4, 3] = OthelloBoard.Piece.color(OthelloBoard.Color.black)
 		
-		self.state = .Turn(OthelloBoard.Color.White)
+		self.state = .turn(OthelloBoard.Color.white)
 	}
 	
-	func allMoves(color: OthelloBoard.Color) -> [OthelloMove] {
+	func allMoves(_ color: OthelloBoard.Color) -> [OthelloMove] {
 		var moves: Array<OthelloMove> = []
 		
 		for x in 0..<self.board.boardWidth
@@ -65,14 +65,14 @@ struct OthelloGame {
 	}
 	
 	func currentColor() -> OthelloBoard.Color? {
-		if case .Turn(let currentPlayerColor) = self.state {
+		if case .turn(let currentPlayerColor) = self.state {
 			return currentPlayerColor
 		} else {
 			return nil
 		}
 	}
 	
-	func hasMoves(color: OthelloBoard.Color) -> Bool {
+	func hasMoves(_ color: OthelloBoard.Color) -> Bool {
 		for x in 0..<self.board.boardWidth
 		{
 			for y in 0..<self.board.boardHeight
@@ -88,19 +88,19 @@ struct OthelloGame {
 		return false
 	}
 	
-	func isTurnOf(color: OthelloBoard.Color) -> Bool {
-		if case .Turn(let currentPlayerColor) = self.state where currentPlayerColor == color {
+	func isTurnOf(_ color: OthelloBoard.Color) -> Bool {
+		if case .turn(let currentPlayerColor) = self.state , currentPlayerColor == color {
 			return true
 		} else {
 			return false
 		}
 	}
 	
-	func isValidMove(move: OthelloMove, forColor color: OthelloBoard.Color) -> Bool {
+	func isValidMove(_ move: OthelloMove, forColor color: OthelloBoard.Color) -> Bool {
 		return processLinesForMove(move, forColor: color, lineProcessor: nil)
 	}
 	
-	static func makeMove(startingState startingState: OthelloGame, move: OthelloMove, forColor color: OthelloBoard.Color) -> OthelloGame {
+	static func makeMove(startingState: OthelloGame, move: OthelloMove, forColor color: OthelloBoard.Color) -> OthelloGame {
 		if !startingState.isTurnOf(color) {
 			return startingState
 		}
@@ -115,7 +115,7 @@ struct OthelloGame {
 				curX -= dx
 				curY -= dy
 				
-				newState.board[curX, curY] = .Color(color)
+				newState.board[curX, curY] = .color(color)
 			}
 		}
 		
@@ -123,31 +123,31 @@ struct OthelloGame {
 		
 		if boardFull == false && newState.hasMoves(color.opposite()) {
 			// Pass turn to the other player
-			newState.state = .Turn(color.opposite())
+			newState.state = .turn(color.opposite())
 		} else if boardFull == false && newState.hasMoves(color) {
 			// Same player continues, because the other player doens't have moves
 		} else {
 			// Game has ended
 			if newState.board.numberOfWhitePieces() > newState.board.numberOfBlackPieces() {
-				newState.state = .Won(.White)
+				newState.state = .won(.white)
 			} else if newState.board.numberOfWhitePieces() < newState.board.numberOfBlackPieces() {
-				newState.state = .Won(.Black)
+				newState.state = .won(.black)
 			} else {
-				newState.state = .Tie
+				newState.state = .tie
 			}
 		}
 		
 		return newState
 	}
 	
-	mutating func makeMove(move: OthelloMove, forColor color: OthelloBoard.Color) {
+	mutating func makeMove(_ move: OthelloMove, forColor color: OthelloBoard.Color) {
 		self = OthelloGame.makeMove(startingState: self, move: move, forColor: color)
 	}
 	
 	static let xDirs = [ -1, -1, -1,  0,  1,  1,  1,  0 ]
 	static let yDirs = [ -1,  0,  1,  1,  1,  0, -1, -1 ]
 	
-	func processLinesForMove(move: OthelloMove, forColor color: OthelloBoard.Color, lineProcessor: ((endX: Int, endY: Int, dx: Int, dy: Int) -> Void)?) -> Bool {
+	func processLinesForMove(_ move: OthelloMove, forColor color: OthelloBoard.Color, lineProcessor: ((_ endX: Int, _ endY: Int, _ dx: Int, _ dy: Int) -> Void)?) -> Bool {
 		if !self.board.isValidCoordinate(x: move.x, y: move.y) {
 			return false
 		}
@@ -177,12 +177,12 @@ struct OthelloGame {
 				let piece = self.board.pieceAt(x: tempX, y: tempY)
 				
 				switch piece {
-				case .Color(let pieceColor):
+				case .color(let pieceColor):
 					if pieceColor == color {
 						if hasFoundOpposite {
 							if lineProcessor != nil {
 								moveIsValid = true
-								lineProcessor!(endX: tempX, endY: tempY, dx: OthelloGame.xDirs[dir], dy: OthelloGame.yDirs[dir])
+								lineProcessor!(tempX, tempY, OthelloGame.xDirs[dir], OthelloGame.yDirs[dir])
 							} else {
 								return true
 							}
@@ -191,7 +191,7 @@ struct OthelloGame {
 					} else if pieceColor == opposite {
 						hasFoundOpposite = true
 					}
-				case .Empty:
+				case .empty:
 					break directionSearch
 				}
 			}
@@ -205,11 +205,11 @@ extension OthelloGame.State : Equatable {}
 
 func ==(lhs: OthelloGame.State, rhs: OthelloGame.State) -> Bool {
 	switch (lhs, rhs) {
-	case (.Turn(let lColor), .Turn(let rColor)) where lColor == rColor:
+	case (.turn(let lColor), .turn(let rColor)) where lColor == rColor:
 		return true
-	case (.Won(let lColor), .Won(let rColor)) where lColor == rColor:
+	case (.won(let lColor), .won(let rColor)) where lColor == rColor:
 		return true
-	case (.Tie, .Tie):
+	case (.tie, .tie):
 		return true
 	default:
 		return false

@@ -10,26 +10,26 @@ import Foundation
 
 
 struct OthelloBoard {
-	private var whitePieces: UInt64
-	private var blackPieces: UInt64
+	fileprivate var whitePieces: UInt64
+	fileprivate var blackPieces: UInt64
 	
 	enum Color {
-		case Black
-		case White
+		case black
+		case white
 		
 		func opposite() -> Color {
 			switch self {
-			case .Black:
-				return .White
-			case .White:
-				return .Black
+			case .black:
+				return .white
+			case .white:
+				return .black
 			}
 		}
 	}
 	
 	enum Piece {
-		case Color(OthelloBoard.Color)
-		case Empty
+		case color(OthelloBoard.Color)
+		case empty
 	}
 	
 	init() {
@@ -66,26 +66,26 @@ struct OthelloBoard {
 		return 8
 	}
 	
-	func iterateBoard(block: (x: Int, y: Int, piece: Piece) -> Void) {
+	func iterateBoard(_ block: (_ x: Int, _ y: Int, _ piece: Piece) -> Void) {
 		for y in 0..<self.boardHeight {
 			for x in 0..<self.boardWidth {
-				block(x: x, y: y, piece: self[x, y])
+				block(x, y, self[x, y])
 			}
 		}
 	}
 	
-	func pieceAt(x x: Int, y: Int) -> Piece {
+	func pieceAt(x: Int, y: Int) -> Piece {
 		return self[x, y]
 	}
 	
 	subscript(x: Int, y: Int) -> Piece {
 		get {
 			if isWhiteAt(x: x, y: y) {
-				return Piece.Color(Color.White)
+				return Piece.color(Color.white)
 			} else if isBlackAt(x: x, y: y) {
-				return Piece.Color(Color.Black)
+				return Piece.color(Color.black)
 			} else {
-				return Piece.Empty
+				return Piece.empty
 			}
 		}
 		set(newValue) {
@@ -93,23 +93,23 @@ struct OthelloBoard {
 			let allBits: UInt64 = 0xffffffffffffffff
 			
 			switch newValue {
-			case .Color(let color):
+			case .color(let color):
 				switch color {
-				case .White:
+				case .white:
 					self.whitePieces = self.whitePieces | bitmask
 					self.blackPieces = self.blackPieces & (allBits ^ bitmask)
-				case .Black:
+				case .black:
 					self.whitePieces = self.whitePieces & (allBits ^ bitmask)
 					self.blackPieces = self.blackPieces | bitmask
 				}
-			case .Empty:
+			case .empty:
 				self.whitePieces = self.whitePieces & (allBits ^ bitmask)
 				self.blackPieces = self.blackPieces & (allBits ^ bitmask)
 			}
 		}
 	}
 	
-	func isValidCoordinate(x x: Int, y: Int) -> Bool {
+	func isValidCoordinate(x: Int, y: Int) -> Bool {
 		if x < 0 || x >= self.boardWidth {
 			return false
 		}
@@ -120,19 +120,19 @@ struct OthelloBoard {
 		return true
 	}
 	
-	func isEmptyAt(x x: Int, y: Int) -> Bool {
+	func isEmptyAt(x: Int, y: Int) -> Bool {
 		return isWhiteAt(x: x, y: y) == false && isBlackAt(x: x, y: y) == false
 	}
 	
-	func isWhiteAt(x x: Int, y: Int) -> Bool {
+	func isWhiteAt(x: Int, y: Int) -> Bool {
 		return (self.whitePieces & bitmaskAt(x: x, y: y)) != 0
 	}
 	
-	func isBlackAt(x x: Int, y: Int) -> Bool {
+	func isBlackAt(x: Int, y: Int) -> Bool {
 		return (self.blackPieces & bitmaskAt(x: x, y: y)) != 0
 	}
 	
-	private func bitmaskAt(x x: Int, y: Int) -> UInt64 {
+	fileprivate func bitmaskAt(x: Int, y: Int) -> UInt64 {
 		assert(0 <= x && x < self.boardWidth)
 		assert(0 <= y && y < self.boardHeight)
 		
@@ -161,13 +161,13 @@ extension OthelloBoard : CustomStringConvertible {
 			for x in 0..<self.boardWidth {
 				let pieceSymbol: String
 				switch self.pieceAt(x: x, y: y) {
-				case .Empty:
+				case .empty:
 					pieceSymbol = "."
-				case .Color(let color):
+				case .color(let color):
 					switch color {
-					case .White:
+					case .white:
 						pieceSymbol = "O"
-					case .Black:
+					case .black:
 						pieceSymbol = "X"
 					}
 				}
@@ -188,7 +188,7 @@ extension OthelloBoard : CustomDebugStringConvertible {
 
 
 
-func numberOfBitsSet(value: UInt64) -> Int {
+func numberOfBitsSet(_ value: UInt64) -> Int {
 	// From: https://en.wikipedia.org/wiki/Hamming_weight
 	let m1: UInt64  = 0x5555555555555555 //binary: 0101...
 	let m2: UInt64  = 0x3333333333333333 //binary: 00110011..

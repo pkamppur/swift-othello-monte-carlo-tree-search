@@ -17,11 +17,11 @@ class ViewController: UIViewController {
 	@IBOutlet weak var boardMarginConstraint: NSLayoutConstraint!
 	@IBOutlet weak var aiInfoLabel: UILabel!
 	
-	private var game: OthelloGame!
-	private let playerColor = OthelloBoard.Color.White
-	private let aiColor = OthelloBoard.Color.Black
-	private var mctsSearch: MonteCarloTreeSearch!
-	private var showTips: Bool = false { didSet {
+	fileprivate var game: OthelloGame!
+	fileprivate let playerColor = OthelloBoard.Color.white
+	fileprivate let aiColor = OthelloBoard.Color.black
+	fileprivate var mctsSearch: MonteCarloTreeSearch!
+	fileprivate var showTips: Bool = false { didSet {
 		self.updateUI()
 		}
 	}
@@ -34,27 +34,27 @@ class ViewController: UIViewController {
 		updateUI()
 	}
 	
-	override func viewWillAppear(animated: Bool) {
+	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		updateBoardMargin(self.view.bounds.size)
 	}
 	
-	override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		updateBoardMargin(size)
 	}
 	
-	private func updateBoardMargin(size: CGSize) {
+	fileprivate func updateBoardMargin(_ size: CGSize) {
 		self.boardMarginConstraint.constant = floor(size.width * 0.025)
 	}
 	
-	@IBAction func boardTapped(tapRecognizer: UITapGestureRecognizer) {
-		if case .Turn(let color) = self.game.state where color != self.playerColor {
+	@IBAction func boardTapped(_ tapRecognizer: UITapGestureRecognizer) {
+		if case .turn(let color) = self.game.state , color != self.playerColor {
 			return
 		}
 		
-		let move = othelloView.moveFromPoint(tapRecognizer.locationInView(othelloView))
+		let move = othelloView.moveFromPoint(tapRecognizer.location(in: othelloView))
 		
-		if case .Turn(let color) = self.game.state {
+		if case .turn(let color) = self.game.state {
 			if self.game.isValidMove(move, forColor: color) {
 				self.game.makeMove(move, forColor: color)
 				updateUI()
@@ -64,25 +64,25 @@ class ViewController: UIViewController {
 		}
 	}
 	
-	@IBAction func toggleShowTips(sender: AnyObject) {
+	@IBAction func toggleShowTips(_ sender: AnyObject) {
 		self.showTips = !self.showTips
 	}
 	
-	private func checkAI() {
-		if case .Turn(let color) = self.game.state where color == self.aiColor {
+	fileprivate func checkAI() {
+		if case .turn(let color) = self.game.state , color == self.aiColor {
 			let currentGameState = self.game
 			
 			if self.mctsSearch == nil {
-				self.mctsSearch = MonteCarloTreeSearch(startingGameState: currentGameState, aiColor: self.aiColor)
+				self.mctsSearch = MonteCarloTreeSearch(startingGameState: currentGameState!, aiColor: self.aiColor)
 			}
 			
-			dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), {
-				self.runAI(timeLimit: 2.0, fromGameState: currentGameState)
+			DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async(execute: {
+				self.runAI(timeLimit: 2.0, fromGameState: currentGameState!)
 			})
 		}
 	}
 	
-	private func runAI(timeLimit timeLimit: NSTimeInterval, fromGameState currentGameState: OthelloGame) {
+	fileprivate func runAI(timeLimit: TimeInterval, fromGameState currentGameState: OthelloGame) {
 		print("Starting Monte Carlo Tree Search")
 		
 		self.mctsSearch.updateStartingState(currentGameState) // Use this to reuse already computed nodes
@@ -91,26 +91,26 @@ class ViewController: UIViewController {
 		// Loop until allotted timeLimit is reached,
 		// eport updates to ui frequently so the user doesn't have to start an static screen
 		let uiUpdateInterval = 0.1
-		let start = NSDate.timeIntervalSinceReferenceDate()
+		let start = Date.timeIntervalSinceReferenceDate
 		var lastUpdateTime = start
-		while NSDate.timeIntervalSinceReferenceDate() - start < timeLimit {
+		while Date.timeIntervalSinceReferenceDate - start < timeLimit {
 			if self.mctsSearch.hasUnsimulatedPlays() == false {
 				break
 			}
 			
 			self.mctsSearch.iterateSearch()
 			
-			let now = NSDate.timeIntervalSinceReferenceDate()
+			let now = Date.timeIntervalSinceReferenceDate
 			if now - lastUpdateTime > uiUpdateInterval {
 				lastUpdateTime = now
 				let tempSearchResults = self.mctsSearch.results()
 				
-				dispatch_async(dispatch_get_main_queue(), {
+				DispatchQueue.main.async(execute: {
 					self.updateAIWithInterimSearchResults(tempSearchResults)
 				})
 			}
 		}
-		let end = NSDate.timeIntervalSinceReferenceDate()
+		let end = Date.timeIntervalSinceReferenceDate
 		
 		let searchResults = self.mctsSearch.results()
 		
@@ -120,12 +120,12 @@ class ViewController: UIViewController {
 		print("    Simulated \(searchResults.simulations) games, conf: \(Int(searchResults.confidence * 100))%")
 		print("    Chose move \(bestMove)")
 		
-		dispatch_async(dispatch_get_main_queue(), {
+		DispatchQueue.main.async(execute: {
 			self.makeAIMove(bestMove, searchResults: searchResults, duration: end - start)
 		})
 	}
 	
-	private func updateAIWithInterimSearchResults(searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode])) {
+	fileprivate func updateAIWithInterimSearchResults(_ searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode])) {
 		self.aiInfoLabel.text = "Simulated \(searchResults.simulations) games"
 		
 		var highlightedMoves = [(move: OthelloMove, color: UIColor)]()
@@ -137,7 +137,7 @@ class ViewController: UIViewController {
 		self.othelloView.highlightedMoves = highlightedMoves
 	}
 	
-	private func makeAIMove(move: OthelloMove, searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode]), duration: NSTimeInterval) {
+	fileprivate func makeAIMove(_ move: OthelloMove, searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode]), duration: TimeInterval) {
 		self.game.makeMove(move, forColor: self.aiColor)
 		
 		self.othelloView.highlightedMoves = []
@@ -149,8 +149,8 @@ class ViewController: UIViewController {
 		self.checkAI()
 	}
 	
-	private func printResults(searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode])) {
-		for moveNove in searchResults.moves.sort({ (left: MCTSNode, right: MCTSNode) -> Bool in
+	fileprivate func printResults(_ searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode])) {
+		for moveNove in searchResults.moves.sorted(by: { (left: MCTSNode, right: MCTSNode) -> Bool in
 			return Double(left.wins) / Double(left.plays) > Double(right.wins) / Double(right.plays)
 		}) {
 			if moveNove.plays > 0 {
@@ -160,29 +160,29 @@ class ViewController: UIViewController {
 		}
 	}
 	
-	private func updateUI() {
+	fileprivate func updateUI() {
 		self.othelloView.board = self.game.board
 		
 		self.whiteScoreLabel.text = "White: \(self.game.board.numberOfWhitePieces())"
 		self.blackScoreLabel.text = "Black: \(self.game.board.numberOfBlackPieces())"
 		
 		switch self.game.state {
-		case .Turn(let color):
+		case .turn(let color):
 			self.turnTextLabel.text = "\(color) turn"
-			self.turnTextLabel.hidden = false
-			self.winningTextLabel.hidden = true
+			self.turnTextLabel.isHidden = false
+			self.winningTextLabel.isHidden = true
 			if self.showTips {
 				self.othelloView.highlightedSquares = self.game.allMoves(color)
 			} else {
 				self.othelloView.highlightedSquares = []
 			}
-		case .Tie:
-			self.turnTextLabel.hidden = true
-			self.winningTextLabel.hidden = false
+		case .tie:
+			self.turnTextLabel.isHidden = true
+			self.winningTextLabel.isHidden = false
 			self.winningTextLabel.text = "Game over: tied"
-		case .Won(let color):
-			self.turnTextLabel.hidden = true
-			self.winningTextLabel.hidden = false
+		case .won(let color):
+			self.turnTextLabel.isHidden = true
+			self.winningTextLabel.isHidden = false
 			self.winningTextLabel.text = "\(color) won!"
 		}
 	}
