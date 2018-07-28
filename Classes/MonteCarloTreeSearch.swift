@@ -112,7 +112,7 @@ final class MonteCarloTreeSearch {
 				results[i] = result
 			})
 		}
-		dispatchGroup.wait(timeout: DispatchTime.distantFuture)
+		_ = dispatchGroup.wait(timeout: DispatchTime.distantFuture)
 		
 		for result in results {
 			MonteCarloTreeSearch.back_prop(fromNode: pickedNode, delta: result) // back propagate the result up the tree

@@ -107,7 +107,7 @@ struct OthelloGame {
 		
 		var newState = startingState
 		
-		newState.processLinesForMove(move, forColor: color) { (endX, endY, dx, dy) in
+		_ = newState.processLinesForMove(move, forColor: color) { (endX, endY, dx, dy) in
 			var curX = endX
 			var curY = endY
 			while !(curX == move.x && curY == move.y)
