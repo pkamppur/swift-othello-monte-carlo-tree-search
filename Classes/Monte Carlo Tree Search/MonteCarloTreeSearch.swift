@@ -294,10 +294,3 @@ final class MonteCarloTreeSearch {
         return best_move_child(node).move
     }
 }
-
-extension Array {
-    func randomItem() -> Element {
-        let index = Int(arc4random_uniform(UInt32(self.count)))
-        return self[index]
-    }
-}

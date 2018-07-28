@@ -16,6 +16,7 @@
 		2B7A75D31CA6932D009A81C9 /* OthelloGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7A75D21CA6932D009A81C9 /* OthelloGame.swift */; };
 		2B7A75D51CA69753009A81C9 /* MonteCarloTreeSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7A75D41CA69753009A81C9 /* MonteCarloTreeSearch.swift */; };
 		2B7A75D71CA69817009A81C9 /* OthelloView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7A75D61CA69817009A81C9 /* OthelloView.swift */; };
+		2BC942C7210C8460008495C5 /* Array+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC942C6210C8460008495C5 /* Array+Additions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		2B7A75D21CA6932D009A81C9 /* OthelloGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OthelloGame.swift; sourceTree = "<group>"; };
 		2B7A75D41CA69753009A81C9 /* MonteCarloTreeSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonteCarloTreeSearch.swift; sourceTree = "<group>"; };
 		2B7A75D61CA69817009A81C9 /* OthelloView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OthelloView.swift; sourceTree = "<group>"; };
+		2BC942C6210C8460008495C5 /* Array+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Additions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				2BC942C2210C83DE008495C5 /* App */,
 				2BC942C3210C83EC008495C5 /* Othello */,
 				2BC942C4210C83FB008495C5 /* Monte Carlo Tree Search */,
+				2BC942C5210C8450008495C5 /* Utils */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -107,6 +110,14 @@
 				2B7A75D41CA69753009A81C9 /* MonteCarloTreeSearch.swift */,
 			);
 			path = "Monte Carlo Tree Search";
+			sourceTree = "<group>";
+		};
+		2BC942C5210C8450008495C5 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2BC942C6210C8460008495C5 /* Array+Additions.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -184,6 +195,7 @@
 				2B7A75D71CA69817009A81C9 /* OthelloView.swift in Sources */,
 				2B7A75D11CA5EE4D009A81C9 /* OthelloBoard.swift in Sources */,
 				2B7A75A11CA5B379009A81C9 /* ViewController.swift in Sources */,
+				2BC942C7210C8460008495C5 /* Array+Additions.swift in Sources */,
 				2B7A75D51CA69753009A81C9 /* MonteCarloTreeSearch.swift in Sources */,
 				2B7A759F1CA5B379009A81C9 /* AppDelegate.swift in Sources */,
 				2B7A75D31CA6932D009A81C9 /* OthelloGame.swift in Sources */,
