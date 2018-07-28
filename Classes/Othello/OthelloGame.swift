@@ -82,46 +82,6 @@ struct OthelloGame {
         return processLinesForMove(move, forColor: color, lineProcessor: nil)
     }
     
-    static func makeMove(startingState: OthelloGame, move: OthelloMove, forColor color: OthelloBoard.Color) -> OthelloGame {
-        if !startingState.isTurnOf(color) {
-            return startingState
-        }
-        
-        var newState = startingState
-        
-        _ = newState.processLinesForMove(move, forColor: color) { (endX, endY, dx, dy) in
-            var curX = endX
-            var curY = endY
-            while !(curX == move.x && curY == move.y)
-            {
-                curX -= dx
-                curY -= dy
-                
-                newState.board[curX, curY] = .color(color)
-            }
-        }
-        
-        let boardFull = newState.board.isFull
-        
-        if boardFull == false && newState.hasMoves(color.opposite()) {
-            // Pass turn to the other player
-            newState.state = .turn(color.opposite())
-        } else if boardFull == false && newState.hasMoves(color) {
-            // Same player continues, because the other player doens't have moves
-        } else {
-            // Game has ended
-            if newState.board.numberOfWhitePieces() > newState.board.numberOfBlackPieces() {
-                newState.state = .won(.white)
-            } else if newState.board.numberOfWhitePieces() < newState.board.numberOfBlackPieces() {
-                newState.state = .won(.black)
-            } else {
-                newState.state = .tie
-            }
-        }
-        
-        return newState
-    }
-    
     mutating func makeMove(_ move: OthelloMove, forColor color: OthelloBoard.Color) {
         self = OthelloGame.makeMove(startingState: self, move: move, forColor: color)
     }
@@ -180,6 +140,48 @@ struct OthelloGame {
         }
         
         return moveIsValid
+    }
+}
+
+extension OthelloGame {
+    static func makeMove(startingState: OthelloGame, move: OthelloMove, forColor color: OthelloBoard.Color) -> OthelloGame {
+        if !startingState.isTurnOf(color) {
+            return startingState
+        }
+        
+        var newState = startingState
+        
+        _ = newState.processLinesForMove(move, forColor: color) { (endX, endY, dx, dy) in
+            var curX = endX
+            var curY = endY
+            while !(curX == move.x && curY == move.y)
+            {
+                curX -= dx
+                curY -= dy
+                
+                newState.board[curX, curY] = .color(color)
+            }
+        }
+        
+        let boardFull = newState.board.isFull
+        
+        if boardFull == false && newState.hasMoves(color.opposite()) {
+            // Pass turn to the other player
+            newState.state = .turn(color.opposite())
+        } else if boardFull == false && newState.hasMoves(color) {
+            // Same player continues, because the other player doens't have moves
+        } else {
+            // Game has ended
+            if newState.board.numberOfWhitePieces() > newState.board.numberOfBlackPieces() {
+                newState.state = .won(.white)
+            } else if newState.board.numberOfWhitePieces() < newState.board.numberOfBlackPieces() {
+                newState.state = .won(.black)
+            } else {
+                newState.state = .tie
+            }
+        }
+        
+        return newState
     }
 }
 
