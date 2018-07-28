@@ -65,7 +65,10 @@ class OthelloView: UIView {
         
         return OthelloMove(x: x, y: y)
     }
-    
+}
+
+// MARK: UIView overrides
+extension OthelloView {
     override func draw(_ rect: CGRect) {
         guard let board = self.board else {
             return
