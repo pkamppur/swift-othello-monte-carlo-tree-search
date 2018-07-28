@@ -17,6 +17,7 @@
 		2B7A75D51CA69753009A81C9 /* MonteCarloTreeSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7A75D41CA69753009A81C9 /* MonteCarloTreeSearch.swift */; };
 		2B7A75D71CA69817009A81C9 /* OthelloView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7A75D61CA69817009A81C9 /* OthelloView.swift */; };
 		2BC942C7210C8460008495C5 /* Array+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC942C6210C8460008495C5 /* Array+Additions.swift */; };
+		2BC942C9210C8487008495C5 /* MCTSNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC942C8210C8487008495C5 /* MCTSNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		2B7A75D41CA69753009A81C9 /* MonteCarloTreeSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonteCarloTreeSearch.swift; sourceTree = "<group>"; };
 		2B7A75D61CA69817009A81C9 /* OthelloView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OthelloView.swift; sourceTree = "<group>"; };
 		2BC942C6210C8460008495C5 /* Array+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Additions.swift"; sourceTree = "<group>"; };
+		2BC942C8210C8487008495C5 /* MCTSNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCTSNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				2B7A75D41CA69753009A81C9 /* MonteCarloTreeSearch.swift */,
+				2BC942C8210C8487008495C5 /* MCTSNode.swift */,
 			);
 			path = "Monte Carlo Tree Search";
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 				2BC942C7210C8460008495C5 /* Array+Additions.swift in Sources */,
 				2B7A75D51CA69753009A81C9 /* MonteCarloTreeSearch.swift in Sources */,
 				2B7A759F1CA5B379009A81C9 /* AppDelegate.swift in Sources */,
+				2BC942C9210C8487008495C5 /* MCTSNode.swift in Sources */,
 				2B7A75D31CA6932D009A81C9 /* OthelloGame.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
