@@ -51,6 +51,7 @@
 				2B7A759C1CA5B378009A81C9 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		2B7A759C1CA5B378009A81C9 /* Products */ = {
 			isa = PBXGroup;
