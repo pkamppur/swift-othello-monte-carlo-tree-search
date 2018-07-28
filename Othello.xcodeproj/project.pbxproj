@@ -302,7 +302,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.pkamppur.Othello;
 				PRODUCT_NAME = Othello;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -317,7 +316,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.pkamppur.Othello;
 				PRODUCT_NAME = Othello;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
