@@ -64,12 +64,9 @@
 		2B7A759D1CA5B379009A81C9 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				2B7A759E1CA5B379009A81C9 /* AppDelegate.swift */,
-				2B7A75A01CA5B379009A81C9 /* ViewController.swift */,
-				2B7A75D61CA69817009A81C9 /* OthelloView.swift */,
-				2B7A75D01CA5EE4D009A81C9 /* OthelloBoard.swift */,
-				2B7A75D21CA6932D009A81C9 /* OthelloGame.swift */,
-				2B7A75D41CA69753009A81C9 /* MonteCarloTreeSearch.swift */,
+				2BC942C2210C83DE008495C5 /* App */,
+				2BC942C3210C83EC008495C5 /* Othello */,
+				2BC942C4210C83FB008495C5 /* Monte Carlo Tree Search */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -83,6 +80,33 @@
 				2B7A75AA1CA5B379009A81C9 /* Info.plist */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		2BC942C2210C83DE008495C5 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				2B7A759E1CA5B379009A81C9 /* AppDelegate.swift */,
+				2B7A75A01CA5B379009A81C9 /* ViewController.swift */,
+				2B7A75D61CA69817009A81C9 /* OthelloView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		2BC942C3210C83EC008495C5 /* Othello */ = {
+			isa = PBXGroup;
+			children = (
+				2B7A75D01CA5EE4D009A81C9 /* OthelloBoard.swift */,
+				2B7A75D21CA6932D009A81C9 /* OthelloGame.swift */,
+			);
+			path = Othello;
+			sourceTree = "<group>";
+		};
+		2BC942C4210C83FB008495C5 /* Monte Carlo Tree Search */ = {
+			isa = PBXGroup;
+			children = (
+				2B7A75D41CA69753009A81C9 /* MonteCarloTreeSearch.swift */,
+			);
+			path = "Monte Carlo Tree Search";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
