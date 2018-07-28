@@ -76,7 +76,9 @@ final class MonteCarloTreeSearch {
         
         return (bestMove: bestChild.move, simulations:self.root.plays, confidence: confidence, self.root.children)
     }
-    
+}
+
+private extension MonteCarloTreeSearch {
     static func findMatchingNode(_ gameState: OthelloGame, fromNode node: MCTSNode) -> MCTSNode? {
         if node.gameState == gameState {
             return node
