@@ -188,7 +188,7 @@ final class MonteCarloTreeSearch {
     }
     
     static func best_move_child(_ node: MCTSNode) -> MCTSNode {
-        // Returns the best action from this game state node. In Monte Carlo Tree Search we pick the one that was visited the most.  We can break ties by picking	the state that won the most.
+        // Returns the best action from this game state node. In Monte Carlo Tree Search we pick the one that was visited the most. We can break ties by picking the state that won the most.
         var most_plays = Int.min
         var best_wins = Int.min
         var best_children = [MCTSNode]()
