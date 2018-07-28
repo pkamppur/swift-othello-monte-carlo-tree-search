@@ -150,7 +150,7 @@ func ==(lhs: OthelloBoard, rhs: OthelloBoard) -> Bool {
 
 extension OthelloBoard : Hashable {
 	var hashValue: Int {
-		return Int(truncatingBitPattern: self.whitePieces | self.blackPieces)
+		return Int(truncatingIfNeeded: self.whitePieces | self.blackPieces)
 	}
 }
 
