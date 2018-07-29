@@ -46,7 +46,9 @@ class ViewController: UIViewController {
     private func updateBoardMargin(_ size: CGSize) {
         self.boardMarginConstraint.constant = floor(size.width * 0.025)
     }
-    
+}
+
+private extension ViewController {
     @IBAction func boardTapped(_ tapRecognizer: UITapGestureRecognizer) {
         if case .turn(let color) = self.game.state , color != self.playerColor {
             return
@@ -67,7 +69,9 @@ class ViewController: UIViewController {
     @IBAction func toggleShowTips(_ sender: AnyObject) {
         self.showTips = !self.showTips
     }
-    
+}
+
+private extension ViewController {
     private func checkAI() {
         if case .turn(let color) = self.game.state , color == self.aiColor {
             let currentGameState = self.game
