@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     private let playerColor = OthelloBoard.Color.white
     private let aiColor = OthelloBoard.Color.black
     private var mctsSearch: MonteCarloTreeSearch!
+    private var aiInfo: String = ""
     private var showTips: Bool = false { didSet {
         self.updateUI()
         }
@@ -29,7 +30,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.game = OthelloGame()
-        self.aiInfoLabel.text = ""
         
         updateUI()
     }
@@ -130,7 +130,7 @@ private extension ViewController {
     }
     
     private func updateAIWithInterimSearchResults(_ searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode])) {
-        self.aiInfoLabel.text = "Simulated \(searchResults.simulations) games"
+        self.aiInfo = "Simulated \(searchResults.simulations) games"
         
         var highlightedMoves = [(move: OthelloMove, color: UIColor)]()
         for moveNode in searchResults.moves {
@@ -146,7 +146,7 @@ private extension ViewController {
         
         self.othelloView.highlightedMoves = []
         
-        self.aiInfoLabel.text = "Simulated \(searchResults.simulations) games in \(Int(duration)) s, conf: \(Int(searchResults.confidence * 100))%"
+        self.aiInfo = "Simulated \(searchResults.simulations) games in \(Int(duration)) s, conf: \(Int(searchResults.confidence * 100))%"
         
         self.updateUI()
         
@@ -164,7 +164,7 @@ private extension ViewController {
         }
     }
     
-    static private func viewModel(for game: OthelloGame, showTips: Bool) -> OthelloViewModel {
+    static private func viewModel(for game: OthelloGame, showTips: Bool, aiInfo: String) -> OthelloViewModel {
         let board = game.board
         
         let whiteScoreText = "White: \(game.board.numberOfWhitePieces())"
@@ -208,11 +208,12 @@ private extension ViewController {
                                 isTurnTextVisible: isTurnTextVisible,
                                 winningText: winningText,
                                 isWinningTextVisible: isWinningTextVisible,
-                                highlightedSquares: highlightedSquares)
+                                highlightedSquares: highlightedSquares,
+                                aiInfo: aiInfo)
     }
     
     private func updateUI() {
-        let viewModel = ViewController.viewModel(for: self.game, showTips: self.showTips)
+        let viewModel = ViewController.viewModel(for: self.game, showTips: self.showTips, aiInfo: self.aiInfo)
         
         self.othelloView.board = viewModel.board
         
@@ -225,6 +226,8 @@ private extension ViewController {
         self.winningTextLabel.isHidden = !viewModel.isWinningTextVisible
         
         self.othelloView.highlightedSquares = viewModel.highlightedSquares
+        
+        self.aiInfoLabel.text = viewModel.aiInfo
     }
 }
 

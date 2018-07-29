@@ -17,4 +17,5 @@ struct OthelloViewModel {
     let winningText: String
     let isWinningTextVisible: Bool
     let highlightedSquares: [OthelloMove]
+    let aiInfo: String
 }
