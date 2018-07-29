@@ -17,11 +17,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var boardMarginConstraint: NSLayoutConstraint!
     @IBOutlet weak var aiInfoLabel: UILabel!
     
-    fileprivate var game: OthelloGame!
-    fileprivate let playerColor = OthelloBoard.Color.white
-    fileprivate let aiColor = OthelloBoard.Color.black
-    fileprivate var mctsSearch: MonteCarloTreeSearch!
-    fileprivate var showTips: Bool = false { didSet {
+    private var game: OthelloGame!
+    private let playerColor = OthelloBoard.Color.white
+    private let aiColor = OthelloBoard.Color.black
+    private var mctsSearch: MonteCarloTreeSearch!
+    private var showTips: Bool = false { didSet {
         self.updateUI()
         }
     }
@@ -43,7 +43,7 @@ class ViewController: UIViewController {
         updateBoardMargin(size)
     }
     
-    fileprivate func updateBoardMargin(_ size: CGSize) {
+    private func updateBoardMargin(_ size: CGSize) {
         self.boardMarginConstraint.constant = floor(size.width * 0.025)
     }
     
@@ -68,7 +68,7 @@ class ViewController: UIViewController {
         self.showTips = !self.showTips
     }
     
-    fileprivate func checkAI() {
+    private func checkAI() {
         if case .turn(let color) = self.game.state , color == self.aiColor {
             let currentGameState = self.game
             
@@ -82,7 +82,7 @@ class ViewController: UIViewController {
         }
     }
     
-    fileprivate func runAI(timeLimit: TimeInterval, fromGameState currentGameState: OthelloGame) {
+    private func runAI(timeLimit: TimeInterval, fromGameState currentGameState: OthelloGame) {
         print("Starting Monte Carlo Tree Search")
         
         self.mctsSearch.updateStartingState(currentGameState) // Use this to reuse already computed nodes
@@ -125,7 +125,7 @@ class ViewController: UIViewController {
         })
     }
     
-    fileprivate func updateAIWithInterimSearchResults(_ searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode])) {
+    private func updateAIWithInterimSearchResults(_ searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode])) {
         self.aiInfoLabel.text = "Simulated \(searchResults.simulations) games"
         
         var highlightedMoves = [(move: OthelloMove, color: UIColor)]()
@@ -137,7 +137,7 @@ class ViewController: UIViewController {
         self.othelloView.highlightedMoves = highlightedMoves
     }
     
-    fileprivate func makeAIMove(_ move: OthelloMove, searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode]), duration: TimeInterval) {
+    private func makeAIMove(_ move: OthelloMove, searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode]), duration: TimeInterval) {
         self.game.makeMove(move, forColor: self.aiColor)
         
         self.othelloView.highlightedMoves = []
@@ -149,7 +149,7 @@ class ViewController: UIViewController {
         self.checkAI()
     }
     
-    fileprivate func printResults(_ searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode])) {
+    private func printResults(_ searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode])) {
         for moveNove in searchResults.moves.sorted(by: { (left: MCTSNode, right: MCTSNode) -> Bool in
             return Double(left.wins) / Double(left.plays) > Double(right.wins) / Double(right.plays)
         }) {
@@ -160,7 +160,7 @@ class ViewController: UIViewController {
         }
     }
     
-    fileprivate func updateUI() {
+    private func updateUI() {
         self.othelloView.board = self.game.board
         
         self.whiteScoreLabel.text = "White: \(self.game.board.numberOfWhitePieces())"

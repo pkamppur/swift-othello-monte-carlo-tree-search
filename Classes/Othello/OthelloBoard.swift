@@ -132,7 +132,7 @@ struct OthelloBoard {
         return (self.blackPieces & bitmaskAt(x: x, y: y)) != 0
     }
     
-    fileprivate func bitmaskAt(x: Int, y: Int) -> UInt64 {
+    private func bitmaskAt(x: Int, y: Int) -> UInt64 {
         assert(0 <= x && x < self.boardWidth)
         assert(0 <= y && y < self.boardHeight)
         

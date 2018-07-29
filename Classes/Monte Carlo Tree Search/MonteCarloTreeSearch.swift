@@ -11,9 +11,9 @@ import Foundation
 
 
 final class MonteCarloTreeSearch {
-    fileprivate var root: MCTSNode
-    fileprivate let aiColor: OthelloBoard.Color
-    fileprivate let dispatchGroup: DispatchGroup = DispatchGroup()
+    private var root: MCTSNode
+    private let aiColor: OthelloBoard.Color
+    private let dispatchGroup: DispatchGroup = DispatchGroup()
     
     init(startingGameState: OthelloGame, aiColor: OthelloBoard.Color) {
         self.root = MCTSNode(gameState: startingGameState) // build a container node

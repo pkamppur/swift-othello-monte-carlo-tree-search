@@ -15,8 +15,8 @@ struct OthelloGame {
         case tie
     }
     
-    fileprivate(set) var board: OthelloBoard
-    fileprivate(set) var state: State
+    private(set) var board: OthelloBoard
+    private(set) var state: State
     
     init () {
         self.board = OthelloBoard()
