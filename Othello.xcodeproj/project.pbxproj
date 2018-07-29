@@ -19,6 +19,7 @@
 		2BC942C7210C8460008495C5 /* Array+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC942C6210C8460008495C5 /* Array+Additions.swift */; };
 		2BC942C9210C8487008495C5 /* MCTSNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC942C8210C8487008495C5 /* MCTSNode.swift */; };
 		2BC942CB210C84AF008495C5 /* OthelloMove.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC942CA210C84AF008495C5 /* OthelloMove.swift */; };
+		2BC942CF210DCC86008495C5 /* OthelloViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BC942CE210DCC86008495C5 /* OthelloViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		2BC942C6210C8460008495C5 /* Array+Additions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Additions.swift"; sourceTree = "<group>"; };
 		2BC942C8210C8487008495C5 /* MCTSNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCTSNode.swift; sourceTree = "<group>"; };
 		2BC942CA210C84AF008495C5 /* OthelloMove.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthelloMove.swift; sourceTree = "<group>"; };
+		2BC942CE210DCC86008495C5 /* OthelloViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthelloViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 				2B7A759E1CA5B379009A81C9 /* AppDelegate.swift */,
 				2B7A75A01CA5B379009A81C9 /* ViewController.swift */,
 				2B7A75D61CA69817009A81C9 /* OthelloView.swift */,
+				2BC942CE210DCC86008495C5 /* OthelloViewModel.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -204,6 +207,7 @@
 				2BC942C7210C8460008495C5 /* Array+Additions.swift in Sources */,
 				2B7A75D51CA69753009A81C9 /* MonteCarloTreeSearch.swift in Sources */,
 				2B7A759F1CA5B379009A81C9 /* AppDelegate.swift in Sources */,
+				2BC942CF210DCC86008495C5 /* OthelloViewModel.swift in Sources */,
 				2BC942CB210C84AF008495C5 /* OthelloMove.swift in Sources */,
 				2BC942C9210C8487008495C5 /* MCTSNode.swift in Sources */,
 				2B7A75D31CA6932D009A81C9 /* OthelloGame.swift in Sources */,
