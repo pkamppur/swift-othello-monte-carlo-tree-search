@@ -6,7 +6,7 @@
 //  Copyright © 2018 Petteri Kamppuri. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct OthelloViewModel {
     let board: OthelloBoard
@@ -17,5 +17,6 @@ struct OthelloViewModel {
     let winningText: String
     let isWinningTextVisible: Bool
     let highlightedSquares: [OthelloMove]
+    let highlightedMoves: [(move: OthelloMove, color: UIColor)]
     let aiInfo: String
 }
