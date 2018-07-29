@@ -30,11 +30,11 @@ final class MonteCarloTreeSearch {
         
         var results = Array<Int>(repeating: 0, count: concurrency)
         for i in 0..<concurrency {
-            DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async(group: dispatchGroup, execute: {
+            DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async(group: dispatchGroup) {
                 let result = MonteCarloTreeSearch.simulate(pickedNode.gameState, colorToOptimize: self.aiColor) // run one sim from this state, return win or lose
                 
                 results[i] = result
-            })
+            }
         }
         _ = dispatchGroup.wait(timeout: DispatchTime.distantFuture)
         

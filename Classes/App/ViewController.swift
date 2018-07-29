@@ -80,9 +80,9 @@ private extension ViewController {
                 self.mctsSearch = MonteCarloTreeSearch(startingGameState: currentGameState!, aiColor: self.aiColor)
             }
             
-            DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async(execute: {
+            DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
                 self.runAI(timeLimit: 2.0, fromGameState: currentGameState!)
-            })
+            }
         }
     }
     
@@ -109,9 +109,9 @@ private extension ViewController {
                 lastUpdateTime = now
                 let tempSearchResults = self.mctsSearch.results()
                 
-                DispatchQueue.main.async(execute: {
+                DispatchQueue.main.async {
                     self.updateAIWithInterimSearchResults(tempSearchResults)
-                })
+                }
             }
         }
         let end = Date.timeIntervalSinceReferenceDate
@@ -124,9 +124,9 @@ private extension ViewController {
         print("    Simulated \(searchResults.simulations) games, conf: \(Int(searchResults.confidence * 100))%")
         print("    Chose move \(bestMove)")
         
-        DispatchQueue.main.async(execute: {
+        DispatchQueue.main.async {
             self.makeAIMove(bestMove, searchResults: searchResults, duration: end - start)
-        })
+        }
     }
     
     private func updateAIWithInterimSearchResults(_ searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode])) {
