@@ -235,4 +235,3 @@ private extension ViewController {
         self.aiInfoLabel.text = viewModel.aiInfo
     }
 }
-
