@@ -164,31 +164,67 @@ private extension ViewController {
         }
     }
     
-    private func updateUI() {
-        self.othelloView.board = self.game.board
+    static private func viewModel(for game: OthelloGame, showTips: Bool) -> OthelloViewModel {
+        let board = game.board
         
-        self.whiteScoreLabel.text = "White: \(self.game.board.numberOfWhitePieces())"
-        self.blackScoreLabel.text = "Black: \(self.game.board.numberOfBlackPieces())"
+        let whiteScoreText = "White: \(game.board.numberOfWhitePieces())"
+        let blackScoreText = "Black: \(game.board.numberOfBlackPieces())"
         
-        switch self.game.state {
+        let turnText: String
+        let isTurnTextVisible: Bool
+        let winningText: String
+        let isWinningTextVisible: Bool
+        let highlightedSquares: [OthelloMove]
+        
+        switch game.state {
         case .turn(let color):
-            self.turnTextLabel.text = "\(color) turn"
-            self.turnTextLabel.isHidden = false
-            self.winningTextLabel.isHidden = true
-            if self.showTips {
-                self.othelloView.highlightedSquares = self.game.allMoves(color)
+            turnText = "\(color) turn"
+            isTurnTextVisible = true
+            winningText = ""
+            isWinningTextVisible = false
+            if showTips {
+                highlightedSquares = game.allMoves(color)
             } else {
-                self.othelloView.highlightedSquares = []
+                highlightedSquares = []
             }
         case .tie:
-            self.turnTextLabel.isHidden = true
-            self.winningTextLabel.isHidden = false
-            self.winningTextLabel.text = "Game over: tied"
+            turnText = ""
+            isTurnTextVisible = false
+            isWinningTextVisible = true
+            winningText = "Game over: tied"
+            highlightedSquares = []
         case .won(let color):
-            self.turnTextLabel.isHidden = true
-            self.winningTextLabel.isHidden = false
-            self.winningTextLabel.text = "\(color) won!"
+            turnText = ""
+            isTurnTextVisible = false
+            isWinningTextVisible = true
+            winningText = "\(color) won!"
+            highlightedSquares = []
         }
+        
+        return OthelloViewModel(board: board,
+                                whiteScoreText: whiteScoreText,
+                                blackScoreText: blackScoreText,
+                                turnText: turnText,
+                                isTurnTextVisible: isTurnTextVisible,
+                                winningText: winningText,
+                                isWinningTextVisible: isWinningTextVisible,
+                                highlightedSquares: highlightedSquares)
+    }
+    
+    private func updateUI() {
+        let viewModel = ViewController.viewModel(for: self.game, showTips: self.showTips)
+        
+        self.othelloView.board = viewModel.board
+        
+        self.whiteScoreLabel.text = viewModel.whiteScoreText
+        self.blackScoreLabel.text = viewModel.blackScoreText
+        
+        self.turnTextLabel.text = viewModel.turnText
+        self.turnTextLabel.isHidden = !viewModel.isTurnTextVisible
+        self.winningTextLabel.text = viewModel.winningText
+        self.winningTextLabel.isHidden = !viewModel.isWinningTextVisible
+        
+        self.othelloView.highlightedSquares = viewModel.highlightedSquares
     }
 }
 
