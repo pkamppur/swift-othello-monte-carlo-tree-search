@@ -162,28 +162,28 @@ private extension OthelloInteractor {
         let highlightedSquares: [OthelloMove]
         
         switch game.state {
-        case .turn(let color):
-            turnText = "\(color) turn"
-            isTurnTextVisible = true
-            winningText = ""
-            isWinningTextVisible = false
-            if showTips {
-                highlightedSquares = game.allMoves(color)
-            } else {
+            case .turn(let color):
+                turnText = "\(color) turn"
+                isTurnTextVisible = true
+                winningText = ""
+                isWinningTextVisible = false
+                if showTips {
+                    highlightedSquares = game.allMoves(color)
+                } else {
+                    highlightedSquares = []
+                }
+            case .tie:
+                turnText = ""
+                isTurnTextVisible = false
+                isWinningTextVisible = true
+                winningText = "Game over: tied"
                 highlightedSquares = []
-            }
-        case .tie:
-            turnText = ""
-            isTurnTextVisible = false
-            isWinningTextVisible = true
-            winningText = "Game over: tied"
-            highlightedSquares = []
-        case .won(let color):
-            turnText = ""
-            isTurnTextVisible = false
-            isWinningTextVisible = true
-            winningText = "\(color) won!"
-            highlightedSquares = []
+            case .won(let color):
+                turnText = ""
+                isTurnTextVisible = false
+                isWinningTextVisible = true
+                winningText = "\(color) won!"
+                highlightedSquares = []
         }
         
         return OthelloViewModel(board: board,

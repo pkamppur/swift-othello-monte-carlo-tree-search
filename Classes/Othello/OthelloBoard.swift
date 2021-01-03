@@ -19,10 +19,10 @@ struct OthelloBoard: Equatable {
         
         func opposite() -> Color {
             switch self {
-            case .black:
-                return .white
-            case .white:
-                return .black
+                case .black:
+                    return .white
+                case .white:
+                    return .black
             }
         }
     }
@@ -93,18 +93,18 @@ struct OthelloBoard: Equatable {
             let allBits: UInt64 = 0xffffffffffffffff
             
             switch newValue {
-            case .color(let color):
-                switch color {
-                case .white:
-                    self.whitePieces = self.whitePieces | bitmask
-                    self.blackPieces = self.blackPieces & (allBits ^ bitmask)
-                case .black:
+                case .color(let color):
+                    switch color {
+                        case .white:
+                            self.whitePieces = self.whitePieces | bitmask
+                            self.blackPieces = self.blackPieces & (allBits ^ bitmask)
+                        case .black:
+                            self.whitePieces = self.whitePieces & (allBits ^ bitmask)
+                            self.blackPieces = self.blackPieces | bitmask
+                    }
+                case .empty:
                     self.whitePieces = self.whitePieces & (allBits ^ bitmask)
-                    self.blackPieces = self.blackPieces | bitmask
-                }
-            case .empty:
-                self.whitePieces = self.whitePieces & (allBits ^ bitmask)
-                self.blackPieces = self.blackPieces & (allBits ^ bitmask)
+                    self.blackPieces = self.blackPieces & (allBits ^ bitmask)
             }
         }
     }
@@ -156,15 +156,15 @@ extension OthelloBoard : CustomStringConvertible {
             for x in 0..<self.boardWidth {
                 let pieceSymbol: String
                 switch self.pieceAt(x: x, y: y) {
-                case .empty:
-                    pieceSymbol = "."
-                case .color(let color):
-                    switch color {
-                    case .white:
-                        pieceSymbol = "O"
-                    case .black:
-                        pieceSymbol = "X"
-                    }
+                    case .empty:
+                        pieceSymbol = "."
+                    case .color(let color):
+                        switch color {
+                            case .white:
+                                pieceSymbol = "O"
+                            case .black:
+                                pieceSymbol = "X"
+                        }
                 }
                 
                 res += pieceSymbol

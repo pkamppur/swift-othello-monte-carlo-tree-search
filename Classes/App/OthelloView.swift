@@ -100,18 +100,18 @@ extension OthelloView {
             let path = UIBezierPath(ovalIn: blockRect.insetBy(dx: 2, dy: 2))
             
             switch piece {
-            case .color(let color):
-                switch color {
-                case .white:
-                    path.stroke()
-                    break
-                case .black:
-                    path.fill()
-                    break
-                }
-                break;
-            case .empty:
-                break;
+                case .color(let color):
+                    switch color {
+                        case .white:
+                            path.stroke()
+                            break
+                        case .black:
+                            path.fill()
+                            break
+                    }
+                    break;
+                case .empty:
+                    break;
             }
             
             if self.highlightedSquares.contains(OthelloMove(x: x, y: y)) {

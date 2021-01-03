@@ -119,22 +119,22 @@ struct OthelloGame: Equatable {
                 let piece = self.board.pieceAt(x: tempX, y: tempY)
                 
                 switch piece {
-                case .color(let pieceColor):
-                    if pieceColor == color {
-                        if hasFoundOpposite {
-                            if lineProcessor != nil {
-                                moveIsValid = true
-                                lineProcessor!(tempX, tempY, OthelloGame.xDirs[dir], OthelloGame.yDirs[dir])
-                            } else {
-                                return true
+                    case .color(let pieceColor):
+                        if pieceColor == color {
+                            if hasFoundOpposite {
+                                if lineProcessor != nil {
+                                    moveIsValid = true
+                                    lineProcessor!(tempX, tempY, OthelloGame.xDirs[dir], OthelloGame.yDirs[dir])
+                                } else {
+                                    return true
+                                }
                             }
+                            break directionSearch
+                        } else if pieceColor == opposite {
+                            hasFoundOpposite = true
                         }
+                    case .empty:
                         break directionSearch
-                    } else if pieceColor == opposite {
-                        hasFoundOpposite = true
-                    }
-                case .empty:
-                    break directionSearch
                 }
             }
         }
@@ -189,14 +189,14 @@ extension OthelloGame.State: Equatable {}
 
 func ==(lhs: OthelloGame.State, rhs: OthelloGame.State) -> Bool {
     switch (lhs, rhs) {
-    case (.turn(let lColor), .turn(let rColor)) where lColor == rColor:
-        return true
-    case (.won(let lColor), .won(let rColor)) where lColor == rColor:
-        return true
-    case (.tie, .tie):
-        return true
-    default:
-        return false
+        case (.turn(let lColor), .turn(let rColor)) where lColor == rColor:
+            return true
+        case (.won(let lColor), .won(let rColor)) where lColor == rColor:
+            return true
+        case (.tie, .tie):
+            return true
+        default:
+            return false
     }
 }
 
