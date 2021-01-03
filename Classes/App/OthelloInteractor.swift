@@ -112,13 +112,10 @@ private extension OthelloInteractor {
     private func updateAIWithInterimSearchResults(_ searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode])) {
         aiInfo = "Simulated \(searchResults.simulations) games"
         
-        var highlightedMoves = [(move: OthelloMove, color: UIColor)]()
-        for moveNode in searchResults.moves {
+        highlightedMoves = searchResults.moves.map { moveNode in
             let winrate = CGFloat(moveNode.wins) / CGFloat(moveNode.plays)
-            highlightedMoves.append((move: moveNode.move, color: UIColor(white: 0.2, alpha: winrate)))
+            return (move: moveNode.move, color: UIColor(white: 0.2, alpha: winrate))
         }
-        
-        self.highlightedMoves = highlightedMoves
         
         notifyViewModelDidChange()
     }
