@@ -27,13 +27,16 @@ final class MonteCarloTreeSearch {
         
         let pickedNode = MonteCarloTreeSearch.tree_policy(root) // pick child state to simulate on
         let concurrency = ProcessInfo.processInfo.activeProcessorCount
+        var mutex = os_unfair_lock()
         
         var results = Array<Int>(repeating: 0, count: concurrency)
         for i in 0..<concurrency {
             DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async(group: dispatchGroup) {
                 let result = MonteCarloTreeSearch.simulate(pickedNode.gameState, colorToOptimize: self.aiColor) // run one sim from this state, return win or lose
                 
+                os_unfair_lock_lock(&mutex)
                 results[i] = result
+                os_unfair_lock_unlock(&mutex)
             }
         }
         _ = dispatchGroup.wait(timeout: DispatchTime.distantFuture)
