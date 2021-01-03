@@ -22,28 +22,28 @@ class OthelloView: UIView {
     
     var board: OthelloBoard? {
         didSet {
-            self.setNeedsDisplay()
+            setNeedsDisplay()
         }
     }
     
     var highlightedSquares: [OthelloMove] = [] {
         didSet {
-            self.setNeedsDisplay()
+            setNeedsDisplay()
         }
     }
     
     var highlightedMoves: [(move: OthelloMove, color: UIColor)] = [] {
         didSet {
-            self.setNeedsDisplay()
+            setNeedsDisplay()
         }
     }
     
     func moveFromPoint(_ point: CGPoint) -> OthelloMove {
-        guard let board = self.board else {
+        guard let board = board else {
             return OthelloMove(x: -1, y: -1)
         }
         
-        let frameRect = self.bounds
+        let frameRect = bounds
         let blockWidth: Int = Int(frameRect.size.width - 1) / board.boardWidth
         let blockHeight: Int = Int(frameRect.size.height - 1) / board.boardHeight
         
@@ -70,11 +70,11 @@ class OthelloView: UIView {
 // MARK: UIView overrides
 extension OthelloView {
     override func draw(_ rect: CGRect) {
-        guard let board = self.board else {
+        guard let board = board else {
             return
         }
         
-        let frameRect = self.bounds
+        let frameRect = bounds
         
         let blockWidth: Int = Int(frameRect.size.width - 1) / board.boardWidth;
         let blockHeight: Int = Int(frameRect.size.height - 1) / board.boardHeight;
@@ -114,7 +114,7 @@ extension OthelloView {
                     break;
             }
             
-            if self.highlightedSquares.contains(OthelloMove(x: x, y: y)) {
+            if highlightedSquares.contains(OthelloMove(x: x, y: y)) {
                 UIColor.blue.set()
                 UIRectFrame(blockRect.insetBy(dx: 1, dy: 1))
                 UIColor.black.set()

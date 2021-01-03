@@ -22,15 +22,15 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.interactor = OthelloInteractor()
-        self.interactor.listener = self
+        interactor = OthelloInteractor()
+        interactor.listener = self
         
-        self.aiInfoLabel.font = UIFont.monospacedDigitSystemFont(ofSize: self.aiInfoLabel.font.pointSize, weight: .regular)
+        aiInfoLabel.font = UIFont.monospacedDigitSystemFont(ofSize: aiInfoLabel.font.pointSize, weight: .regular)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        updateBoardMargin(self.view.bounds.size)
+        updateBoardMargin(view.bounds.size)
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -38,7 +38,7 @@ class ViewController: UIViewController {
     }
     
     private func updateBoardMargin(_ size: CGSize) {
-        self.boardMarginConstraint.constant = floor(size.width * 0.025)
+        boardMarginConstraint.constant = floor(size.width * 0.025)
     }
 }
 
@@ -46,29 +46,29 @@ private extension ViewController {
     @IBAction func boardTapped(_ tapRecognizer: UITapGestureRecognizer) {
         let move = othelloView.moveFromPoint(tapRecognizer.location(in: othelloView))
         
-        self.interactor.makePlayerMove(move)
+        interactor.makePlayerMove(move)
     }
     
     @IBAction func toggleShowTips(_ sender: AnyObject) {
-        self.interactor.showTips = !self.interactor.showTips
+        interactor.showTips = !interactor.showTips
     }
 }
 
 extension ViewController: OthelloInteractorListener {
     func didUpdate(viewModel: OthelloViewModel) {
-        self.othelloView.board = viewModel.board
+        othelloView.board = viewModel.board
         
-        self.whiteScoreLabel.text = viewModel.whiteScoreText
-        self.blackScoreLabel.text = viewModel.blackScoreText
+        whiteScoreLabel.text = viewModel.whiteScoreText
+        blackScoreLabel.text = viewModel.blackScoreText
         
-        self.turnTextLabel.text = viewModel.turnText
-        self.turnTextLabel.isHidden = !viewModel.isTurnTextVisible
-        self.winningTextLabel.text = viewModel.winningText
-        self.winningTextLabel.isHidden = !viewModel.isWinningTextVisible
+        turnTextLabel.text = viewModel.turnText
+        turnTextLabel.isHidden = !viewModel.isTurnTextVisible
+        winningTextLabel.text = viewModel.winningText
+        winningTextLabel.isHidden = !viewModel.isWinningTextVisible
         
-        self.othelloView.highlightedSquares = viewModel.highlightedSquares
-        self.othelloView.highlightedMoves = viewModel.highlightedMoves
+        othelloView.highlightedSquares = viewModel.highlightedSquares
+        othelloView.highlightedMoves = viewModel.highlightedMoves
         
-        self.aiInfoLabel.text = viewModel.aiInfo
+        aiInfoLabel.text = viewModel.aiInfo
     }
 }

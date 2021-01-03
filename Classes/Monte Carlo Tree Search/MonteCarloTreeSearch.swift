@@ -47,28 +47,28 @@ final class MonteCarloTreeSearch {
     }
     
     func hasUnsimulatedPlays() -> Bool {
-        return self.root.hasUnsimulatedPlays()
+        return root.hasUnsimulatedPlays()
     }
     
     func updateStartingState(_ startingGameState: OthelloGame) {
-        let newRoot = MonteCarloTreeSearch.findMatchingNode(startingGameState, fromNode: self.root)
+        let newRoot = MonteCarloTreeSearch.findMatchingNode(startingGameState, fromNode: root)
         if newRoot != nil && newRoot!.plays > 0 {
             print("    Found root from previous run \(newRoot!)")
-            print("    Number of old simulations: \(newRoot!.plays), reuse: \(Int(Double(newRoot!.plays) / Double(self.root.plays) * 100))%")
-            self.root = newRoot!
-            self.root.parent = nil
-            self.root.move = OthelloMove(x: -1, y: -1) // This move can't ever be taken, it's the current state.
+            print("    Number of old simulations: \(newRoot!.plays), reuse: \(Int(Double(newRoot!.plays) / Double(root.plays) * 100))%")
+            root = newRoot!
+            root.parent = nil
+            root.move = OthelloMove(x: -1, y: -1) // This move can't ever be taken, it's the current state.
         } else {
-            self.root = MCTSNode(gameState: startingGameState) // build a container node
+            root = MCTSNode(gameState: startingGameState) // build a container node
         }
     }
     
     func bestAction() -> OthelloMove {
-        return MonteCarloTreeSearch.best_move(self.root)
+        return MonteCarloTreeSearch.best_move(root)
     }
     
     func results() -> (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode]) {
-        let bestChild = MonteCarloTreeSearch.best_move_child(self.root)
+        let bestChild = MonteCarloTreeSearch.best_move_child(root)
         let confidence: Double
         
         if bestChild.plays == 0 {
@@ -77,7 +77,7 @@ final class MonteCarloTreeSearch {
             confidence = Double(bestChild.wins) / Double(bestChild.plays)
         }
         
-        return (bestMove: bestChild.move, simulations:self.root.plays, confidence: confidence, self.root.children)
+        return (bestMove: bestChild.move, simulations:root.plays, confidence: confidence, root.children)
     }
 }
 
@@ -150,7 +150,7 @@ private extension MonteCarloTreeSearch {
                 } else {
                     //assert(curNode.allMovesExpanded)
                     // Every possible next state has been expanded, so pick one
-                    curNode = self.best_child(curNode)
+                    curNode = best_child(curNode)
                 }
             }
         }

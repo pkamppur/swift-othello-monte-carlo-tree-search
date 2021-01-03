@@ -33,8 +33,8 @@ struct OthelloBoard: Equatable {
     }
     
     init() {
-        self.whitePieces = 0
-        self.blackPieces = 0
+        whitePieces = 0
+        blackPieces = 0
     }
     
     init(other: OthelloBoard) {
@@ -43,19 +43,19 @@ struct OthelloBoard: Equatable {
     }
     
     func numberOfWhitePieces() -> Int {
-        return numberOfBitsSet(self.whitePieces)
+        return numberOfBitsSet(whitePieces)
     }
     
     func numberOfBlackPieces() -> Int {
-        return numberOfBitsSet(self.blackPieces)
+        return numberOfBitsSet(blackPieces)
     }
     
     var numberOfPieces: Int {
-        return numberOfBitsSet(self.whitePieces | self.blackPieces)
+        return numberOfBitsSet(whitePieces | blackPieces)
     }
     
     var isFull: Bool {
-        return (self.numberOfPieces) == (self.boardWidth * self.boardHeight)
+        return (numberOfPieces) == (boardWidth * boardHeight)
     }
     
     var boardWidth: Int {
@@ -67,8 +67,8 @@ struct OthelloBoard: Equatable {
     }
     
     func iterateBoard(_ block: (_ x: Int, _ y: Int, _ piece: Piece) -> Void) {
-        for y in 0..<self.boardHeight {
-            for x in 0..<self.boardWidth {
+        for y in 0..<boardHeight {
+            for x in 0..<boardWidth {
                 block(x, y, self[x, y])
             }
         }
@@ -96,24 +96,24 @@ struct OthelloBoard: Equatable {
                 case .color(let color):
                     switch color {
                         case .white:
-                            self.whitePieces = self.whitePieces | bitmask
-                            self.blackPieces = self.blackPieces & (allBits ^ bitmask)
+                            whitePieces = whitePieces | bitmask
+                            blackPieces = blackPieces & (allBits ^ bitmask)
                         case .black:
-                            self.whitePieces = self.whitePieces & (allBits ^ bitmask)
-                            self.blackPieces = self.blackPieces | bitmask
+                            whitePieces = whitePieces & (allBits ^ bitmask)
+                            blackPieces = blackPieces | bitmask
                     }
                 case .empty:
-                    self.whitePieces = self.whitePieces & (allBits ^ bitmask)
-                    self.blackPieces = self.blackPieces & (allBits ^ bitmask)
+                    whitePieces = whitePieces & (allBits ^ bitmask)
+                    blackPieces = blackPieces & (allBits ^ bitmask)
             }
         }
     }
     
     func isValidCoordinate(x: Int, y: Int) -> Bool {
-        if x < 0 || x >= self.boardWidth {
+        if x < 0 || x >= boardWidth {
             return false
         }
-        if y < 0 || y >= self.boardHeight {
+        if y < 0 || y >= boardHeight {
             return false
         }
         
@@ -125,16 +125,16 @@ struct OthelloBoard: Equatable {
     }
     
     func isWhiteAt(x: Int, y: Int) -> Bool {
-        return (self.whitePieces & bitmaskAt(x: x, y: y)) != 0
+        return (whitePieces & bitmaskAt(x: x, y: y)) != 0
     }
     
     func isBlackAt(x: Int, y: Int) -> Bool {
-        return (self.blackPieces & bitmaskAt(x: x, y: y)) != 0
+        return (blackPieces & bitmaskAt(x: x, y: y)) != 0
     }
     
     private func bitmaskAt(x: Int, y: Int) -> UInt64 {
-        assert(0 <= x && x < self.boardWidth)
-        assert(0 <= y && y < self.boardHeight)
+        assert(0 <= x && x < boardWidth)
+        assert(0 <= y && y < boardHeight)
         
         let bitmask: UInt64 = (1 << UInt64(x)) << (8 * UInt64(y))
         
@@ -152,10 +152,10 @@ extension OthelloBoard : Hashable {
 extension OthelloBoard : CustomStringConvertible {
     var description: String {
         var res: String = ""
-        for y in 0..<self.boardHeight {
-            for x in 0..<self.boardWidth {
+        for y in 0..<boardHeight {
+            for x in 0..<boardWidth {
                 let pieceSymbol: String
-                switch self.pieceAt(x: x, y: y) {
+                switch pieceAt(x: x, y: y) {
                     case .empty:
                         pieceSymbol = "."
                     case .color(let color):
@@ -177,7 +177,7 @@ extension OthelloBoard : CustomStringConvertible {
 
 extension OthelloBoard : CustomDebugStringConvertible {
     var debugDescription: String {
-        return self.description
+        return description
     }
 }
 

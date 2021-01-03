@@ -32,7 +32,7 @@ final class MCTSNode {
     }
     
     func hasVisitedMove(_ move: OthelloMove) -> Bool {
-        for child in self.children {
+        for child in children {
             if child.move == move {
                 return true
             }
@@ -42,26 +42,26 @@ final class MCTSNode {
     
     func addChild(_ child: MCTSNode) {
         child.parent = self
-        self.children.append(child)
+        children.append(child)
     }
     
     func hasUnsimulatedPlays() -> Bool {
-        if case .tie = self.gameState.state {
+        if case .tie = gameState.state {
             return false
         }
-        if case .won(_) = self.gameState.state {
+        if case .won(_) = gameState.state {
             return false
         }
         
-        if self.allMovesExpanded == false {
+        if allMovesExpanded == false {
             return true
         }
         
-        if self.children.count == 0 {
+        if children.count == 0 {
             return true
         }
         
-        for child in self.children {
+        for child in children {
             if child.hasUnsimulatedPlays() {
                 return true
             }
