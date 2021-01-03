@@ -32,12 +32,7 @@ final class MCTSNode {
     }
     
     func hasVisitedMove(_ move: OthelloMove) -> Bool {
-        for child in children {
-            if child.move == move {
-                return true
-            }
-        }
-        return false
+        children.first { $0.move == move } != nil
     }
     
     func addChild(_ child: MCTSNode) {
