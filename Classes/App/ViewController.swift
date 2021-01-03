@@ -24,6 +24,8 @@ class ViewController: UIViewController {
         
         self.interactor = OthelloInteractor()
         self.interactor.listener = self
+        
+        self.aiInfoLabel.font = UIFont.monospacedDigitSystemFont(ofSize: self.aiInfoLabel.font.pointSize, weight: .regular)
     }
     
     override func viewWillAppear(_ animated: Bool) {
