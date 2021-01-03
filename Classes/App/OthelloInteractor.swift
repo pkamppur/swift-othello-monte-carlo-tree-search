@@ -60,8 +60,10 @@ private extension OthelloInteractor {
                 self.mctsSearch = MonteCarloTreeSearch(startingGameState: currentGameState!, aiColor: self.aiColor)
             }
             
+            let aiThinkTime: TimeInterval = 2
+            
             DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async {
-                self.runAI(timeLimit: 2.0, fromGameState: currentGameState!)
+                self.runAI(timeLimit: aiThinkTime, fromGameState: currentGameState!)
             }
         }
     }
