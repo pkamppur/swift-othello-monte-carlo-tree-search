@@ -52,7 +52,7 @@ struct OthelloGame: Equatable {
         }
     }
     
-    func hasMoves(_ color: OthelloBoard.Color) -> Bool {
+    func hasMoves(for color: OthelloBoard.Color) -> Bool {
         for x in 0..<board.boardWidth {
             for y in 0..<board.boardHeight {
                 let move = OthelloMove(x: x, y: y)
@@ -158,10 +158,10 @@ extension OthelloGame {
         
         let boardFull = newState.board.isFull
         
-        if boardFull == false && newState.hasMoves(color.opposite()) {
+        if boardFull == false && newState.hasMoves(for: color.opposite()) {
             // Pass turn to the other player
             newState.state = .turn(color.opposite())
-        } else if boardFull == false && newState.hasMoves(color) {
+        } else if boardFull == false && newState.hasMoves(for: color) {
             // Same player continues, because the other player doens't have moves
         } else {
             // Game has ended
