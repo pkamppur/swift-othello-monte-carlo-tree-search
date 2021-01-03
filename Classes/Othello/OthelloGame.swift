@@ -31,13 +31,10 @@ struct OthelloGame: Equatable {
     func allMoves(_ color: OthelloBoard.Color) -> [OthelloMove] {
         var moves: Array<OthelloMove> = []
         
-        for x in 0..<board.boardWidth
-        {
-            for y in 0..<board.boardHeight
-            {
+        for x in 0..<board.boardWidth {
+            for y in 0..<board.boardHeight {
                 let move = OthelloMove(x: x, y: y)
-                if isValidMove(move, forColor:color)
-                {
+                if isValidMove(move, forColor:color) {
                     moves.append(move)
                 }
             }
@@ -55,13 +52,10 @@ struct OthelloGame: Equatable {
     }
     
     func hasMoves(_ color: OthelloBoard.Color) -> Bool {
-        for x in 0..<board.boardWidth
-        {
-            for y in 0..<board.boardHeight
-            {
+        for x in 0..<board.boardWidth {
+            for y in 0..<board.boardHeight {
                 let move = OthelloMove(x: x, y: y)
-                if isValidMove(move, forColor:color)
-                {
+                if isValidMove(move, forColor:color) {
                     return true
                 }
             }
@@ -101,8 +95,7 @@ struct OthelloGame: Equatable {
         let opposite = color.opposite()
         
         var moveIsValid = false
-        for dir in 0..<OthelloGame.xDirs.count
-        {
+        for dir in 0..<OthelloGame.xDirs.count {
             var tempX = move.x
             var tempY = move.y
             
@@ -154,8 +147,7 @@ extension OthelloGame {
         _ = newState.processLinesForMove(move, forColor: color) { (endX, endY, dx, dy) in
             var curX = endX
             var curY = endY
-            while !(curX == move.x && curY == move.y)
-            {
+            while !(curX == move.x && curY == move.y) {
                 curX -= dx
                 curY -= dy
                 
