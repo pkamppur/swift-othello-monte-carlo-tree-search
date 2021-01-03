@@ -9,7 +9,7 @@
 import Foundation
 
 
-struct OthelloBoard {
+struct OthelloBoard: Equatable {
     fileprivate var whitePieces: UInt64
     fileprivate var blackPieces: UInt64
     
@@ -142,15 +142,10 @@ struct OthelloBoard {
     }
 }
 
-extension OthelloBoard : Equatable {}
-
-func ==(lhs: OthelloBoard, rhs: OthelloBoard) -> Bool {
-    return lhs.whitePieces == rhs.whitePieces && lhs.blackPieces == rhs.blackPieces
-}
-
 extension OthelloBoard : Hashable {
-    var hashValue: Int {
-        return Int(truncatingIfNeeded: self.whitePieces | self.blackPieces)
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(whitePieces)
+        hasher.combine(blackPieces)
     }
 }
 

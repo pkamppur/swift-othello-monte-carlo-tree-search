@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct OthelloGame {
+struct OthelloGame: Equatable {
     enum State {
         case turn(OthelloBoard.Color)
         case won(OthelloBoard.Color)
@@ -185,7 +185,7 @@ extension OthelloGame {
     }
 }
 
-extension OthelloGame.State : Equatable {}
+extension OthelloGame.State: Equatable {}
 
 func ==(lhs: OthelloGame.State, rhs: OthelloGame.State) -> Bool {
     switch (lhs, rhs) {
@@ -200,14 +200,8 @@ func ==(lhs: OthelloGame.State, rhs: OthelloGame.State) -> Bool {
     }
 }
 
-extension OthelloGame : Equatable {}
-
-func ==(lhs: OthelloGame, rhs: OthelloGame) -> Bool {
-    return lhs.board == rhs.board && lhs.state == rhs.state
-}
-
 extension OthelloGame : Hashable {
-    var hashValue: Int {
-        return board.hashValue
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(board)
     }
 }

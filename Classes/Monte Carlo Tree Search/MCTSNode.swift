@@ -78,8 +78,8 @@ func ==(lhs: MCTSNode, rhs: MCTSNode) -> Bool {
 }
 
 extension MCTSNode : Hashable {
-    var hashValue: Int {
-        return gameState.hashValue
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(gameState)
     }
 }
 
