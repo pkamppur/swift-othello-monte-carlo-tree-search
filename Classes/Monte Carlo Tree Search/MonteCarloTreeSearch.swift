@@ -114,7 +114,7 @@ private extension MonteCarloTreeSearch {
             case .turn(let color):
                 let availableMoves = gameState.allMoves(color)
                 
-                gameState.makeMove(availableMoves.randomItem(), forColor: color)
+                gameState.makeMove(availableMoves.randomElement()!, forColor: color)
             }
         }
     }
@@ -137,7 +137,7 @@ private extension MonteCarloTreeSearch {
                         return !curNode.hasVisitedMove(move)
                     })
                     assert(unexpanded.count > 0)
-                    let move = unexpanded.randomItem()
+                    let move = unexpanded.randomElement()!
                     let state = OthelloGame.makeMove(startingState: curNode.gameState, move: move, forColor: color)
                     let n = MCTSNode(gameState: state, move: move)
                     curNode.addChild(n)
@@ -216,7 +216,7 @@ private extension MonteCarloTreeSearch {
                 }
             }
         }
-        return best_children.randomItem()
+        return best_children.randomElement()!
     }
     
     static func best_move(_ node: MCTSNode) -> OthelloMove {
