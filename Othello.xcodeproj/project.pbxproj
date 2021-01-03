@@ -164,7 +164,7 @@
 				TargetAttributes = {
 					2B7A759A1CA5B378009A81C9 = {
 						CreatedOnToolsVersion = 7.3;
-						LastSwiftMigration = 0940;
+						LastSwiftMigration = 1220;
 					};
 				};
 			};
@@ -362,7 +362,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.pkamppur.Othello;
 				PRODUCT_NAME = Othello;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -380,7 +380,7 @@
 				PRODUCT_NAME = Othello;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
