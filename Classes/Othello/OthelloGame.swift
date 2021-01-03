@@ -30,6 +30,7 @@ struct OthelloGame: Equatable {
     
     func allMoves(_ color: OthelloBoard.Color) -> [OthelloMove] {
         var moves: Array<OthelloMove> = []
+        moves.reserveCapacity(32)
         
         for x in 0..<board.boardWidth {
             for y in 0..<board.boardHeight {
