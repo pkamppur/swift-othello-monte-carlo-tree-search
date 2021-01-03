@@ -170,10 +170,9 @@
 			};
 			buildConfigurationList = 2B7A75961CA5B378009A81C9 /* Build configuration list for PBXProject "Othello" */;
 			compatibilityVersion = "Xcode 9.3";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
