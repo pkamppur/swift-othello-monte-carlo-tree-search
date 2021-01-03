@@ -36,17 +36,15 @@ class OthelloInteractor {
     }
     
     func makePlayerMove(_ move: OthelloMove) {
-        if case .turn(let color) = self.game.state , color != self.playerColor {
+        guard case .turn(let color) = self.game.state , color == self.playerColor else {
             return
         }
         
-        if case .turn(let color) = self.game.state {
-            if self.game.isValidMove(move, forColor: color) {
-                self.game.makeMove(move, forColor: color)
-                notifyViewModelDidChange()
-                
-                checkAI()
-            }
+        if self.game.isValidMove(move, forColor: color) {
+            self.game.makeMove(move, forColor: color)
+            notifyViewModelDidChange()
+            
+            checkAI()
         }
     }
 }
