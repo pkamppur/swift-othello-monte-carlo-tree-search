@@ -75,7 +75,6 @@
 				2BC942C2210C83DE008495C5 /* App */,
 				2BC942C3210C83EC008495C5 /* Othello */,
 				2BC942C4210C83FB008495C5 /* Monte Carlo Tree Search */,
-				2BC942C5210C8450008495C5 /* Utils */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -120,13 +119,6 @@
 				2BC942C8210C8487008495C5 /* MCTSNode.swift */,
 			);
 			path = "Monte Carlo Tree Search";
-			sourceTree = "<group>";
-		};
-		2BC942C5210C8450008495C5 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
