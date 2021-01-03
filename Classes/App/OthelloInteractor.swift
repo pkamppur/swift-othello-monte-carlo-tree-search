@@ -40,8 +40,8 @@ class OthelloInteractor {
             return
         }
         
-        if game.isValidMove(move, forColor: color) {
-            game.makeMove(move, forColor: color)
+        if game.isValidMove(move, for: color) {
+            game.makeMove(move, for: color)
             notifyViewModelDidChange()
             
             checkAI()
@@ -121,7 +121,7 @@ private extension OthelloInteractor {
     }
     
     private func makeAIMove(_ move: OthelloMove, searchResults: (bestMove: OthelloMove, simulations: Int, confidence: Double, moves: [MCTSNode]), duration: TimeInterval) {
-        game.makeMove(move, forColor: aiColor)
+        game.makeMove(move, for: aiColor)
         
         highlightedMoves = []
         

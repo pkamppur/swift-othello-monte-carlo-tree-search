@@ -35,7 +35,7 @@ struct OthelloGame: Equatable {
         for x in 0..<board.boardWidth {
             for y in 0..<board.boardHeight {
                 let move = OthelloMove(x: x, y: y)
-                if isValidMove(move, forColor:color) {
+                if isValidMove(move, for:color) {
                     moves.append(move)
                 }
             }
@@ -56,7 +56,7 @@ struct OthelloGame: Equatable {
         for x in 0..<board.boardWidth {
             for y in 0..<board.boardHeight {
                 let move = OthelloMove(x: x, y: y)
-                if isValidMove(move, forColor:color) {
+                if isValidMove(move, for: color) {
                     return true
                 }
             }
@@ -73,18 +73,18 @@ struct OthelloGame: Equatable {
         }
     }
     
-    func isValidMove(_ move: OthelloMove, forColor color: OthelloBoard.Color) -> Bool {
-        return processLinesForMove(move, forColor: color, lineProcessor: nil)
+    func isValidMove(_ move: OthelloMove, for color: OthelloBoard.Color) -> Bool {
+        return processLinesForMove(move, for: color, lineProcessor: nil)
     }
     
-    mutating func makeMove(_ move: OthelloMove, forColor color: OthelloBoard.Color) {
+    mutating func makeMove(_ move: OthelloMove, for color: OthelloBoard.Color) {
         self = OthelloGame.makeMove(startingState: self, move: move, forColor: color)
     }
     
     static let xDirs = [ -1, -1, -1,  0,  1,  1,  1,  0 ]
     static let yDirs = [ -1,  0,  1,  1,  1,  0, -1, -1 ]
     
-    func processLinesForMove(_ move: OthelloMove, forColor color: OthelloBoard.Color, lineProcessor: ((_ endX: Int, _ endY: Int, _ dx: Int, _ dy: Int) -> Void)?) -> Bool {
+    func processLinesForMove(_ move: OthelloMove, for color: OthelloBoard.Color, lineProcessor: ((_ endX: Int, _ endY: Int, _ dx: Int, _ dy: Int) -> Void)?) -> Bool {
         if !board.isValidCoordinate(x: move.x, y: move.y) {
             return false
         }
@@ -145,7 +145,7 @@ extension OthelloGame {
         
         var newState = startingState
         
-        _ = newState.processLinesForMove(move, forColor: color) { (endX, endY, dx, dy) in
+        _ = newState.processLinesForMove(move, for: color) { (endX, endY, dx, dy) in
             var curX = endX
             var curY = endY
             while !(curX == move.x && curY == move.y) {

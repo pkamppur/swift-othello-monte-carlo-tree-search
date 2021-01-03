@@ -114,7 +114,7 @@ private extension MonteCarloTreeSearch {
             case .turn(let color):
                 let availableMoves = gameState.allMoves(color)
                 
-                gameState.makeMove(availableMoves.randomElement()!, forColor: color)
+                gameState.makeMove(availableMoves.randomElement()!, for: color)
             }
         }
     }
