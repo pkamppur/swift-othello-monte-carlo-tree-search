@@ -123,8 +123,9 @@ extension OthelloView {
         
         for highlightedMove in highlightedMoves {
             highlightedMove.color.set()
-            let blockRect = blockRectCalculator(highlightedMove.move.x, highlightedMove.move.y).insetBy(dx: 1, dy: 1)
-            UIRectFillUsingBlendMode(blockRect, .normal)
+            let blockRect = blockRectCalculator(highlightedMove.move.x, highlightedMove.move.y)
+            let path = UIBezierPath(ovalIn: blockRect.insetBy(dx: 3, dy: 3))
+            path.fill()
         }
     }
 }
