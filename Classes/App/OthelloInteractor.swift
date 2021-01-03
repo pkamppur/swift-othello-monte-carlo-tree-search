@@ -125,7 +125,10 @@ private extension OthelloInteractor {
         
         highlightedMoves = []
         
-        aiInfo = "Simulated \(searchResults.simulations) games in \(Int(duration)) s, conf: \(Int(searchResults.confidence * 100))%"
+        aiInfo = """
+Simulated \(searchResults.simulations) games in \(Int(duration)) s, conf: \(Int(searchResults.confidence * 100))%
+\(Int(Double(searchResults.simulations) / duration)) Games per second
+"""
         
         notifyViewModelDidChange()
         
